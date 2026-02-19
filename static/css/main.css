@@ -1,5 +1,124 @@
+/*
+    Current color palette:
+    background-color: #0f172a
+    accents: #7c3aed and #2dd4bf
+    text: #f8fafc
+    secondary-text/extra accent color: #1e293b
+    background: rgba(255, 255, 255, 0.7) for glass vibes (not as nice as apple's :( )
+*/
+
+/*
+    **note** please look for different family fonts to use. the default ones are very bland.
+*/
+
+/*boilerplate, set up attributes*/
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
+
+a{
+    text-decoration: none;
+    color: #1e293b;
+}
+
+html, body{
+    height: 100vh; /*subject to change for future pages, 100% would work better*/
+}
+
+body{
+    overflow-x: hidden;
+    background-color: #0f172a;
+}
+
+/*nav content start*/
+header{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    padding-block-start: 1rem;
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 10vh;
+    background: rgba(255, 255, 255, 0.55);
+    /*backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); */
+    border-radius: 4rem;
+    width: 98vw;
+    padding-inline: 2rem;
+    position: relative;
+}
+
+.nav-left a{
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+#violet-color{
+    color: #7c3aed;
+}
+
+#mint-color{
+    color: #2dd4bf;
+}
+
+.nav-right{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 25%;
+}
+
+.nav-right a{ /*fix the styling for these, it looks really weird (this goes for this whole navbar LOL)*/
+    font-size: 1.125rem;
+    border: 2px solid #1e293b;
+    padding: 0.75rem 1rem;
+    border-radius: 4rem;
+    transition: all 0.1s ease 0.1s;
+}
+
+.nav-right a:hover{
+    
+}
+/*nav content end*/
+
+/*hero content start*/
+    .hero{
+        display: flex;
+        flex-direction: column;
+        height: calc(90vh - 1rem); /*calculating the offset from the header padding from earlier*/
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid white; /*this lowkey adds some nice contrast, but i only have it here for structural reasons
+                                    this is to be removed (unless we like it)*/
+        border-radius: 4rem;
+    }
+
+    .hero-text{
+        color: #f8fafc;
+        height: 50%;
+        display: flex;
+        align-items: flex-end;
+    }
+    .hero-text h1{
+        font-size: 5rem;
+        font-weight: 800;
+    }
+    .hero-buttons{
+        height: 50%;
+        width: 100%;
+        display: flex;
+        flex-direction: row; /* not needed, but i will write it here explicitly anyway */
+        justify-content: space-around;
+        align-items: center;
+    }
+/*hero content end*/
