@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
@@ -46,17 +47,30 @@ def login():
     form = LoginForm() #we will pass this over to our html to be rendered later
     if form.validate_on_submit(): #this checks if it is POST request. but since it is handled by a function, do I still need the methods list up above??
         #need to validate user information, refer the input with the database
-        user= User.query.filter_by(username=form.username.data).first()
+        user=User.query.filter_by(username=form.username.data).first()
         login_user(user)
-        return redirect('home')
+        return redirect('home') #change home to whatever it is meant to be later, this is just a placeholder for now
     
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    #to register a user we need to check that they don't already have
-    pass
+        #that means cross check the information passed by the form with the database.
+    #start by declaring the form 
+    form=RegisterForm()
+    if form.validate_on_submit():
+        #no need to check whether this is duplicate user, since this check is handled within the form class already (the one we wrote earlier)
+        #so why write the check in the class and not here? because the form class we wrote inherits from flask_form (wtforms) which
+        #saves the user inputs. So if the user enters invalid input, when the page hits a quick refresh, instead of having to re-enter
+        #everything, their inputs are just there and they have to fix it, rather than restart. thats the only reason.
+        #you could handle that here also, but doing so would require manual code, where as wtforms handles it automatically for us!
+        hashed_password=bcrypt.generate_password_hash(form.password.data)
+        new_user=User(email=form.email.data, username=form.username.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
+    return render_template('register.html', form=form)
 
 
-
-
+if __name__ == "__main__":
+    app.run(debug=True)
