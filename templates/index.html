@@ -1,12 +1,41 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>AppName</title>
+<title>TierDrop</title>
 {% endblock %}
 
 
 {% block body %}
-    <header></header>
-    <main>Hello World</main> <!--this should show hello world-->
+    <header>
+        <nav>
+            <div class = "nav-left"> <!--insert some logo, or fancy text here. For now just filler text-->
+                <a href = ""><span id = 'violet-color'>Tier</span><span id = 'mint-color'>Drop</span></a>
+            </div>
+            <div class = "nav-right">
+                <a href = "{{url_for('login')}}">Log In</a>
+                <a href = "{{url_for('register')}}">Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!--Home page Hero-->
+        <section class = "hero">
+            <!--background image will be done as a pseudo element in CSS main.css-->
+            <div class = "hero-text"> <!--should take up about 80% of the screen-->
+                <h1> TierDrop </h1> <!--Not proper header usage, but roll with it-->
+                <p></p>            <!--Come up with some nice slogan or something-->
+            </div>
+            <div class = "hero-buttons">
+                <a href=""> View Tier Lists</a> <!-- Should take user to general list page-->
+                <a href="{{url_for('register')}}"> Sign Up </a> <!-- should take user to sign up page -->
+                                                                <!--'reg' is the name of method signature that follows the register
+                                                                route in our app.py. def name. don't get it confused with the content
+                                                                inside the route method in app.route(). In simpler terms. it should 
+                                                                be the method signature that goes in there, and not the URL-->
+                
+            </div>
+        </section>
+    </main> <!--this should show hello world-->
     <footer></footer>
 {% endblock %}

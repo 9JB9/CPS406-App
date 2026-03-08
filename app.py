@@ -15,6 +15,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 class User(db.Model, UserMixin):
     #need to create a row for each user. #rows don't need to be explicitly declared, sinc each user as of now will just be one row
         #each row will have a column for email
@@ -69,7 +72,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
-    return render_template('register.html', form=form)
+    return render_template('signup.html', form=form)
 
 
 if __name__ == "__main__":
