@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>AppName</title>
+<title>TierDrop</title>
 {% endblock %}
 
 
@@ -12,8 +12,8 @@
                 <a href = ""><span id = 'violet-color'>Tier</span><span id = 'mint-color'>Drop</span></a>
             </div>
             <div class = "nav-right">
-                <a href = "">Log In</a>
-                <a href = "">Register</a>
+                <a href = "{{url_for('login')}}">Log In</a>
+                <a href = "{{url_for('register')}}">Register</a>
             </div>
         </nav>
     </header>
@@ -28,7 +28,7 @@
             </div>
             <div class = "hero-buttons">
                 <a href=""> View Tier Lists</a> <!-- Should take user to general list page-->
-                <a href="{{url_for('reg')}}"> Sign Up </a> <!-- should take user to sign up page -->
+                <a href="{{url_for('register')}}"> Sign Up </a> <!-- should take user to sign up page -->
                                                                 <!--'reg' is the name of method signature that follows the register
                                                                 route in our app.py. def name. don't get it confused with the content
                                                                 inside the route method in app.route(). In simpler terms. it should 

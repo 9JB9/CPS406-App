@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %}
+    <!--no need for header here, since the entire page will be one giant form block-->
+    <main id = "reg-main">
+        <form method = "POST" action = "" class = "reg-form">
+            {{form.hidden_tag()}}
+            <div class = "">
+                {{form.email}}
+            </div>
+            <div class = "">
+                {{form.username}}
+            </div>
+            <div class = "">
+                {{form.password}}
+            </div>
+            {{form.submit}}
+            <a href = "{{url_for('login')}}">Already have an account? Sign in</a>
+        </form>
+    </main>
+{% endblock %}
