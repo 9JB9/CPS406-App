@@ -85,9 +85,6 @@ nav{
     transition: all 0.1s ease 0.1s;
 }
 
-.nav-right a:hover{
-    
-}
 /*nav content end*/
 
 /*hero content start*/
@@ -122,3 +119,31 @@ nav{
         align-items: center;
     }
 /*hero content end*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*sign up page content*/
+
+#reg-main{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reg-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 70%;
+    width: 45%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4rem;
+    background-color: #f8fafc;
+}
+
+.reg-form a{
+    color: #7c3aed;
+}

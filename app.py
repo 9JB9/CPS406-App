@@ -40,6 +40,18 @@ class RegisterForm(FlaskForm):
     password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Passowrd"})
     submit = SubmitField("Sign up")
 
+    #we need to check that this user isnt a duplicate
+    #any method you write with the pattern "validate_" will get detected by one of these libraries (I forget which)
+    #so that when a post request is encountered, it runs this method to validate the user entries
+    
+    def validate_user (self, email, username):
+        existing_user_email = User.query.filter_by(email=email.data).first()
+        existing_user_username = User.query.filter_by(username=username.data).first()
+        if existing_user_email:
+            raise ValidationError("An account with this email already exists!")
+        if existing_user_username:
+            raise ValidationError("This username is already taken!")
+
 
 @app.route('/') #when the user first accesses our link/runs the app, redirect them here. Literally a landing page/homepage
 def home(): #The function to run for this route
