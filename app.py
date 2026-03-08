@@ -52,11 +52,6 @@ class RegisterForm(FlaskForm):
         if existing_user_username:
             raise ValidationError("This username is already taken!")
 
-
-@app.route('/') #when the user first accesses our link/runs the app, redirect them here. Literally a landing page/homepage
-def home(): #The function to run for this route
-    return render_template('index.html')
-
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm() #we will pass this over to our html to be rendered later
@@ -85,7 +80,6 @@ def register():
         db.session.commit()
         return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
