@@ -52,11 +52,14 @@ class RegisterForm(FlaskForm):
         if existing_user_username:
             raise ValidationError("This username is already taken!")
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm() #we will pass this over to our html to be rendered later
     if form.validate_on_submit(): #this checks if it is POST request. but since it is handled by a function, do I still need the methods list up above??
-        #need to validate user information, refer the input with the database
         user=User.query.filter_by(username=form.username.data).first()
         login_user(user)
         return redirect('home') #change home to whatever it is meant to be later, this is just a placeholder for now
