@@ -5,8 +5,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 db = SQLAlchemy(app)
@@ -30,28 +31,37 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
-    email = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Email"})
-    password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password"})
+    email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
+    password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Login") # this will be used to represent the button in the html form
 
+    def validate_email(self, email):
+        existing_user_email = User.query.filter_by(email=email.data).first()
+        if not existing_user_email:
+            raise ValidationError("An account with this email does not exist! Try signing up.")
 class RegisterForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     username = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Username"})
-    password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Passowrd"})
+    password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Sign up")
 
     #we need to check that this user isnt a duplicate
     #any method you write with the pattern "validate_" will get detected by one of these libraries (I forget which)
     #so that when a post request is encountered, it runs this method to validate the user entries
     
-    def validate_user (self, email, username):
-        existing_user_email = User.query.filter_by(email=email.data).first()
+    #**NOTICE**#
+    #IM GOING TO CHANGE THIS IN A MOMENT TO RETURN AN ERROR WITHIN THE LOGIN/REGISTER FILES AND ROUTES
+    #BECAUSE RIGHT NOW IT RETURNS A BLANK PAGE WITH THE ERROR WHICH IS PRETTY LAME
+    #THIS MIGHT RESULT IN ME MOVING THIS TO THE ROUTE METHODS UNTIL WE FIGURE OUT HOW THAT WORKS
+    #THIS IS FUNCTIONAL BUT NOT PLEASANT LOOKING FOR NOW
+    def validate_username(self, username):
         existing_user_username = User.query.filter_by(username=username.data).first()
-        if existing_user_email:
-            raise ValidationError("An account with this email already exists!")
         if existing_user_username:
             raise ValidationError("This username is already taken!")
-
+    def validate_email(self, email):
+        existing_user_email = User.query.filter_by(email=email.data).first()
+        if existing_user_email:
+            raise ValidationError("This email is already taken!")
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -60,9 +70,10 @@ def index():
 def login():
     form = LoginForm() #we will pass this over to our html to be rendered later
     if form.validate_on_submit(): #this checks if it is POST request. but since it is handled by a function, do I still need the methods list up above??
-        user=User.query.filter_by(username=form.username.data).first()
-        login_user(user)
-        return redirect('home') #change home to whatever it is meant to be later, this is just a placeholder for now
+        user= User.query.filter_by(email=form.email.data).first()
+        if user: #if none, that means that the user tried to login with a username that doesn't exist
+            login_user(user)
+            return redirect('dashboard') #change home to whatever it is meant to be later, this is just a placeholder for now
     
     return render_template('login.html', form=form)
 
@@ -84,5 +95,8 @@ def register():
         return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
 
+@app.route('/dashboard')
+def dashboard ():
+    return render_template('dashboard.html')
 if __name__ == "__main__":
     app.run(debug=True)

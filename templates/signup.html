@@ -7,17 +7,20 @@
     <main id = "reg-main">
         <form method = "POST" action = "" class = "reg-form">
             {{form.hidden_tag()}}
-            <div class = "">
+            <h1>Sign Up</h1>
+            <div class = "reg-form-div">
                 {{form.email}}
             </div>
-            <div class = "">
+            <div class = "reg-form-div">
                 {{form.username}}
             </div>
-            <div class = "">
+            <div class = "reg-form-div">
                 {{form.password}}
             </div>
-            {{form.submit}}
-            <a href = "{{url_for('login')}}">Already have an account? Sign in</a>
+            <div class = "reg-form-submit">
+                {{form.submit}}
+                <a href = "{{url_for('login')}}">Already have an account? Sign in</a>
+            </div>
         </form>
     </main>
 {% endblock %}
