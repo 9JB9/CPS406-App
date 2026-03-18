@@ -15,6 +15,7 @@
 - Flask CORS (allows react frontend to talk to Flask backend) ---> pip install flask-cors
 
 YOU CAN INSTALL ALL OF THEM AT THE SAME TIME JUST RUN:
+
 pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt flask-cors
 
 ## Front-end (no setup needed)
