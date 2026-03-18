@@ -15,7 +15,6 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -38,7 +37,8 @@ class LoginForm(FlaskForm):
     def validate_email(self, email):
         existing_user_email = User.query.filter_by(email=email.data).first()
         if not existing_user_email:
-            raise ValidationError("An account with this email does not exist! Try signing up.")
+            display_type = "flex"
+            raise ValidationError("Invalid login")
 class RegisterForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     username = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Username"})
@@ -75,6 +75,7 @@ def login():
             login_user(user)
             return redirect('dashboard') #change home to whatever it is meant to be later, this is just a placeholder for now
     
+
     return render_template('login.html', form=form)
 
 @app.route('/register', methods=['POST', 'GET'])
