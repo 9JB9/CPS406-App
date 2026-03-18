@@ -8,6 +8,14 @@
 ## Back-end tools setup
 - Flask (Python library, web framework) ---> pip install flask
 - SQL Alchemy (Python SQL Toolkit) ---> pip install flask_sqlalchemy
+-Flask Login (Flask library that manages session, but different from sessions library, this one comes with special user authentication handling) ---> pip install flask-login
+-Flask-wtf (handles login and signup forms and validation) ---> pip install flask-wtf
+-wtforms (handles login and signup forms and validation) ---> pip install wtforms
+-Flask BCRYPT (hashes passwords) ---> pip install flask-bcrypt
+-Flask CORS (allows react frontend to talk to Flask backend) ---> pip install flask-cors
+
+YOU CAN INSTALL ALL OF THEM AT THE SAME TIME JUST RUN:
+pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt flask-cors
 
 ## Front-end (no setup needed)
 - HTML ---> no setup, web based, runs natively
