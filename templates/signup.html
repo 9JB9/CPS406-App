@@ -16,6 +16,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+                <p>Email</p>
                 {{form.email}}
             </div>
             <div class = "reg-form-div {{'has-error' if form.username.errors else ''}}">
@@ -26,6 +27,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+                <p>Username</p>
                 {{form.username}}
             </div>
             <div class = "reg-form-div {{'has-error' if form.password.errors else ''}}">
@@ -36,6 +38,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
+                <p>Password</p>
                 {{form.password}}
             </div>
             <div class = "reg-form-submit">
