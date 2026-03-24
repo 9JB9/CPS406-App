@@ -77,9 +77,9 @@ def login():
         user= User.query.filter_by(email=form.email.data).first()
         if user: #if none, that means that the user tried to login with a username that doesn't exist
             login_user(user)
-            return redirect('dashboard') #change home to whatever it is meant to be later, this is just a placeholder for now
-    
-
+            return redirect('profile-page') #apparantly the profile-page should be the real redirector? Let me know if this is wrong
+        else: #I'm adding this in the event that we may want to handle failed logins here later
+            pass
     return render_template('login.html', form=form)
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -103,6 +103,13 @@ def register():
 @app.route('/dashboard')
 @login_required
 def dashboard ():
-    return render_template('dashboard.html', user=current_user)
+    return render_template('dashboard.html')
+
+@app.route('/profile-page')
+@login_required # Ensures only logged-in users can access this
+def profilePage():
+    # current_user is provided by flask_login and contains the data from the User class
+    return render_template('profile-page.html', user=current_user)
+
 if __name__ == "__main__":
     app.run(debug=True)

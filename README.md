@@ -3,7 +3,7 @@
 ## Initial setup
 - Install Python on your machine ---> https://www.python.org/downloads/
 - clone the project from github onto your desired project folder ---> git clone https://github.com/9JB9/CPS406-App.git
-- set up the virtual environment in your project folder ---> pythom -m venv venv
+- set up the virtual environment in your project folder ---> python -m venv venv
 
 ## Back-end tools setup
 - Flask (Python library, web framework) ---> pip install flask
