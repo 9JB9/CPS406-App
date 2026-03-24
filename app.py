@@ -15,7 +15,6 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -80,6 +79,7 @@ def login():
             login_user(user)
             return redirect('dashboard') #change home to whatever it is meant to be later, this is just a placeholder for now
     
+
     return render_template('login.html', form=form)
 
 @app.route('/register', methods=['POST', 'GET'])

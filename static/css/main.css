@@ -229,6 +229,7 @@ nav{
     background-color: #f8fafc;
     border-radius: 4rem;
     gap: 1em;
+    position: relative;
 }
 
 .log-form a{
@@ -255,7 +256,7 @@ nav{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
+    margin-block-end: -2em;
 }
 .log-form-div.has-error input{
     border: 2px solid #e74c3c;
@@ -264,10 +265,18 @@ nav{
 }
 
 .errors{
+    border: 2px solid green;
     display: flex;
     width: 85%;
-    align-items: center;
-    justify-content: space-between;
+    height: 35%;
+    align-content: flex-end;
+    justify-content: center;
+    margin-block-start: -2em;
+    margin-block-end: -2em;
+    color: #f8fafc;
+    position: relative;
+    text-align: center;
+    transition: all 0.15 ease-in-out 0.15s;
 }
 
 .errors #err{
@@ -277,7 +286,6 @@ nav{
     border-radius: 0.65rem;
     margin-block-end: 0.5em;
 }
-
 
 .errors #text{
     width: 85%;
@@ -289,6 +297,7 @@ nav{
     padding: 0.6rem 0.75rem;
     border-radius: 0.5rem;
     width: 85%;
+    transition: all 0.15s ease-in-out 0.15s;
 }
 
 .log-form-div a {
