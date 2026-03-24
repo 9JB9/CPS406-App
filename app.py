@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_manager, LoginManager, login_user
+from flask_login import UserMixin, login_manager, LoginManager, login_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from wtforms.validators import InputRequired, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 app = Flask(__name__)
@@ -31,7 +31,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
-    email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
+    email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Login") # this will be used to represent the button in the html form
 
@@ -45,7 +45,7 @@ class LoginForm(FlaskForm):
         if existing_user_password and not bcrypt.check_password_hash(existing_user_password.password, password.data):
             raise ValidationError("Wrong Password and/or username!")
 class RegisterForm(FlaskForm):
-    email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
+    email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     username = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Username"})
     password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Sign up")
@@ -101,7 +101,8 @@ def register():
     return render_template('signup.html', form=form)
 
 @app.route('/dashboard')
+@login_required
 def dashboard ():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', user=current_user)
 if __name__ == "__main__":
     app.run(debug=True)
