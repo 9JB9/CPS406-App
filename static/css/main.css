@@ -151,8 +151,10 @@ nav{
     height: 100%;
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .reg-form-div input {
@@ -160,6 +162,13 @@ nav{
     border-radius: 0.5rem;
     width: 85%;
 }
+
+.reg-form-div.has-error input {
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 25px #e74c3c,
+                0 0 15px #1e293b;
+}
+
 
 .reg-form a{
     color: #7c3aed;
@@ -255,16 +264,6 @@ nav{
                 0 0 15px #1e293b;
 }
 
-/*.log-form:has(.errors ~ .log-form-div.has-error input:hover) .errors{
-    display: flex;
-    position: absolute;
-    height: 65%;
-    align-items: flex-start;
-    width: 85%;
-    justify-content: center;
-    text-align: center;
-    color: #f8fafc;
-}*/
 .errors{
     border: 2px solid green;
     display: flex;
