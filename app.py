@@ -39,6 +39,11 @@ class LoginForm(FlaskForm):
         existing_user_email = User.query.filter_by(email=email.data).first()
         if not existing_user_email:
             raise ValidationError("An account with this email does not exist! Try signing up.")
+    
+    def validate_password(self, password): #checking that the password matches
+        existing_user_password = User.query.filter_by(password=password.data).first() #returns an user I am pretty sure
+        if existing_user_password and not bcrypt.check_password_hash(existing_user_password.password, password.data):
+            raise ValidationError("Wrong Password and/or username!")
 class RegisterForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     username = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Username"})
@@ -57,11 +62,11 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(username=username.data).first()
         if existing_user_username:
-            raise ValidationError("This username is already taken!")
+            raise ValidationError("An account with this username already exists!")
     def validate_email(self, email):
         existing_user_email = User.query.filter_by(email=email.data).first()
         if existing_user_email:
-            raise ValidationError("This email is already taken!")
+            raise ValidationError("An account with this email already exists!")
 @app.route('/')
 def index():
     return render_template('index.html')
