@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_manager, LoginManager, login_user
+from flask_login import UserMixin, login_manager, LoginManager, login_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from wtforms.validators import InputRequired, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 app = Flask(__name__)
@@ -99,5 +99,12 @@ def register():
 @app.route('/dashboard')
 def dashboard ():
     return render_template('dashboard.html')
+
+@app.route('/profile-page')
+@login_required # Ensures only logged-in users can access this
+def profilePage():
+    # current_user is provided by flask_login and contains the data from the User class
+    return render_template('profile-page.html', user=current_user)
+
 if __name__ == "__main__":
     app.run(debug=True)
