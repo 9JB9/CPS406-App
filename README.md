@@ -16,7 +16,7 @@
 
 YOU CAN INSTALL ALL OF THEM AT THE SAME TIME JUST RUN:
 
-pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt flask-cors
+pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt flask-cors email-validator
 
 ## Front-end (no setup needed)
 - HTML ---> no setup, web based, runs natively
