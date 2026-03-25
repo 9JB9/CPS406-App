@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_manager, LoginManager, login_user
+from flask_login import UserMixin, login_manager, LoginManager, login_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from wtforms.validators import InputRequired, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -96,8 +97,18 @@ def register():
         return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
 
-@app.route('/dashboard')
+#Temporary for testing comment functionality (replace this with a database table)
+comments_list = []
+
+@app.route('/dashboard', methods=['POST', 'GET'])
 def dashboard ():
-    return render_template('dashboard.html')
+    if request.method == 'POST':
+        content = request.form.get('comment-input')
+        if content is not None and content.strip() != "":
+            comments_list.append({'user': current_user.username, 'content': content, 'time': datetime.now()})
+        return redirect(url_for('dashboard'))  #Redirect to dashboard to show the newly added comment.
+    return render_template('dashboard.html', comments=comments_list, user=current_user)    
+
 if __name__ == "__main__":
     app.run(debug=True)
+

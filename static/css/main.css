@@ -333,3 +333,45 @@ nav{
 }
 
 /*login page content end*/
+
+/* comments content */
+
+.comments {
+    clear: both;
+    width: 100%;
+    padding: 10px;
+}
+
+.comments textarea {
+    margin-top: 10px;
+    width: 800px;
+    height: 80px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.comments button {
+    display: block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ccc;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.comments-preview {
+    margin-top: 10px;
+}
+
+.comment-body {
+    margin-left: 20px;
+    max-width: 800px;
+    word-wrap: break-word;
+}
+
+/* comments content end*/

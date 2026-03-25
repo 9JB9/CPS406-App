@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/static/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/static/vite.svg" />typical comment layoutcomment 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tier-list</title>
     <script type="module" crossorigin src="/static/assets/index-A3JeU0ux.js"></script>
@@ -11,5 +11,24 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <div class="comments">
+      <h2>Comments</h2>
+      <form method="POST">
+        <textarea name="comment-input" placeholder="Add a new comment"></textarea>
+        <button type="submit">Send</button>
+      </form>
+
+      <div class="comments-preview">
+        {% for comment in comments %}
+          <div class="comment">
+            <p class="comment-author">
+              <strong>{{ comment.user }}</strong> ({{ comment.time.strftime("%Y-%m-%d %H:%M") }})
+            </p>
+            <p class="comment-body"> {{ comment.content }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   </body>
 </html>
