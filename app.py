@@ -6,6 +6,8 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+import json
+
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -28,6 +30,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(254), nullable=False, unique=True) #email must be unique
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    tier_lists = db.Column(db.Text, nullable=True)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
@@ -111,5 +114,26 @@ def profilePage():
     # current_user is provided by flask_login and contains the data from the User class
     return render_template('profile-page.html', user=current_user)
 
+@app.route('/save-list', methods = ['POST'])
+def save_list():
+    #this route ties to the new react build, should tie to the database and save the lists here.
+    lst = request.get_json()
+
+    if not lst:
+        return {'error' : 'no data was received'}, 400 #i love doing errors like this now
+
+    if current_user.tier_lists: #checks if the column for that user's tier lists is empty in the database
+        saved_lists = json.loads(current_user.tier_lists) #if not empty we load them into this variable
+    else:
+        #if they are empty, we declare it as an empty list
+        saved_lists = []
+    
+    saved_lists.append(lst)
+    current_user.tier_lists = json.dumps(saved_lists)
+
+    #then finally we commit to the database to save everything properly
+    db.session.commit()
+    #we can have a proper return message to send out over here I guess
+    return {'message': 'saved gone right!'}, 200 #search these codes on your own if you are curious
 if __name__ == "__main__":
     app.run(debug=True)
