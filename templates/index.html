@@ -9,7 +9,7 @@
     <header>
         <nav>
             <div class = "nav-left"> <!--insert some logo, or fancy text here. For now just filler text-->
-                <a href = ""><span id = 'violet-color'>Tier</span><span id = 'mint-color'>Drop</span></a>
+                <a href = "">TierDrop</a>
             </div>
             <div class = "nav-right">
                 <a href = "{{url_for('login')}}">Log In</a>
@@ -27,7 +27,7 @@
                 <p></p>            <!--Come up with some nice slogan or something-->
             </div>
             <div class = "hero-buttons">
-                <a href=""> View Tier Lists</a> <!-- Should take user to general list page-->
+                <a href="{{url_for('profilePage')}}"> View Tier Lists</a> <!-- Should take user to general list page-->
                 <a href="{{url_for('register')}}"> Sign Up </a> <!-- should take user to sign up page -->
                                                                 <!--'reg' is the name of method signature that follows the register
                                                                 route in our app.py. def name. don't get it confused with the content
