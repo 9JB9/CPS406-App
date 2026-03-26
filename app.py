@@ -101,30 +101,42 @@ def register():
         return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
 
-<<<<<<< HEAD
-#Temporary for testing comment functionality (replace this with a database table)
+#Temporary variables for testing comment functionality and like/views functionality (replace this with a database table or other tracking method as needed)
 comments_list = []
+user_likes = {} # Dictionary to track the state of user likes (Key = username, Value = True/False) to ensure users can only like once.
+likes = 0 # Count likes
+views = 0 # Count page views
+viewers = set() # Track unique viewers to prevent view count from updating on page refreshes by the same user. Improve this later using session tracking or cookies.
 
 @app.route('/dashboard', methods=['POST', 'GET'])
 def dashboard ():
+    global likes
+    global views
     if request.method == 'POST':
-        content = request.form.get('comment-input')
-        if content is not None and content.strip() != "":
-            comments_list.append({'user': current_user.username, 'content': content, 'time': datetime.now()})
-        return redirect(url_for('dashboard'))  #Redirect to dashboard to show the newly added comment.
-    return render_template('dashboard.html', comments=comments_list, user=current_user)    
-=======
-@app.route('/dashboard')
-@login_required
-def dashboard ():
-    return render_template('dashboard.html')
+        user_action = request.form.get('action')
+        if user_action == 'comment':
+            content = request.form.get('comment-input')
+            if content is not None and content.strip() != "":
+                comments_list.append({'user': current_user.username, 'content': content, 'time': datetime.now()})
+        elif user_action == 'like':
+            if user_likes.get(current_user.username) == True:
+                likes -= 1
+                user_likes[current_user.username] = False
+            else:
+                likes += 1
+                user_likes[current_user.username] = True
+        return redirect(url_for('dashboard'))  #Redirect to dashboard to show the newly added comment or incremented like.
+    if current_user.username not in viewers:
+        viewers.add(current_user.username)
+        views += 1
+    liked_status = user_likes.get(current_user.username, False)
+    return render_template('dashboard.html', comments=comments_list, user=current_user, likes=likes, liked=liked_status, views=views)
 
 @app.route('/profile-page')
 @login_required # Ensures only logged-in users can access this
 def profilePage():
     # current_user is provided by flask_login and contains the data from the User class
     return render_template('profile-page.html', user=current_user)
->>>>>>> main
 
 if __name__ == "__main__":
     app.run(debug=True)

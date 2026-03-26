@@ -354,6 +354,67 @@ nav{
 
 /*login page content end*/
 
+/* action-bar content */
+
+.action-bar {
+  clear: both;
+  width: 825px;
+  display: flex;
+  align-items: center;
+  gap: 10px;       
+  margin: 0 0 15px 10px;;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.like-button {
+  font-size: 18px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 16px;
+}
+
+.like-button:hover {
+  transform: scale(1.1);
+}
+
+.likes-count {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.action-bar button {
+  padding: 5px 12px;
+  border-radius: 16px;
+  border: none;
+  background-color: #eee;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.action-bar button:hover {
+  background-color: #ddd;
+  transform: scale(1.05);
+}
+
+.views-count {
+  margin-left: auto;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* action-bar content end*/
+
 /* comments content */
 
 .comments {
