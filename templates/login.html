@@ -17,9 +17,11 @@
                 {% endif %}
             </div>
             <div class="log-form-div {{'has-error' if form.email.errors else ''}}">
+                <p>Email</p>
                 {{form.email}}
             </div>
             <div class="log-form-div">
+                <p>Password</p>
                 {{form.password}}
                 <a href = "">Forgot your password?</a>
             </div>

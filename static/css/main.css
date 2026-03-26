@@ -20,7 +20,7 @@
 
 a{
     text-decoration: none;
-    color: #1e293b;
+    color: #f8fafc;
 }
 
 html, body{
@@ -59,6 +59,9 @@ nav{
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    color: transparent;
+    background-clip: text;
 }
 
 #violet-color{
@@ -83,11 +86,16 @@ nav{
     padding: 0.75rem 1rem;
     border-radius: 4rem;
     transition: all 0.1s ease 0.1s;
+    color: #1e293b;
+    transition: all 0.15s ease-in-out 0.15s;
 }
 
-.nav-right a:hover{
-    
+.nav-right a:hover {
+    background-color: #1e293b;
+    color: rgba(255, 255, 255, 0.55);
+;
 }
+
 /*nav content end*/
 
 /*hero content start*/
@@ -144,22 +152,37 @@ nav{
     justify-content: center;
     background-color: #f8fafc;
     border-radius: 4rem;
-    gap: 1em;
+    gap: 0.5rem;
+    padding: 2.5rem 0;
 }
 
 .reg-form-div {
     height: 100%;
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    position: relative;
+    gap: 0.25rem;
+    z-index: 1000;
 }
 
+.reg-form-div p{
+    width: 85%;
+}
 .reg-form-div input {
     padding: 0.6rem 0.75rem;
     border-radius: 0.5rem;
     width: 85%;
 }
+
+.reg-form-div.has-error input {
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 25px #e74c3c,
+                0 0 15px #1e293b;
+}
+
 
 .reg-form a{
     color: #7c3aed;
@@ -173,7 +196,7 @@ nav{
 .reg-form-submit {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
     width: 100%;
     align-items: center;
     justify-content: center;
@@ -196,7 +219,7 @@ nav{
     filter: brightness(1.35);
     transform: translateY(-3.5px);
 }
-.reg-form :nth-child(5){
+.reg-form > :nth-child(5){
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -219,7 +242,6 @@ nav{
     justify-content: center;
     background-color: #f8fafc;
     border-radius: 4rem;
-    gap: 1em;
     position: relative;
 }
 
@@ -229,12 +251,13 @@ nav{
 
 .log-form-head{
     height: 50%;
-    margin-block-start: 1rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     width: 100%;
+    position: relative;
+    margin-block-start: 20px;
 }
 
 .log-form-head h1{
@@ -247,37 +270,34 @@ nav{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-block-end: -2em;
+    gap: 1em;
 }
+
+.log-form-div p{
+    width: 85%;
+}
+
 .log-form-div.has-error input{
     border: 2px solid #e74c3c;
     box-shadow: 0 0 25px #e74c3c,
                 0 0 15px #1e293b;
 }
 
-/*.log-form:has(.errors ~ .log-form-div.has-error input:hover) .errors{
-    display: flex;
-    position: absolute;
-    height: 65%;
-    align-items: flex-start;
-    width: 85%;
-    justify-content: center;
-    text-align: center;
-    color: #f8fafc;
-}*/
 .errors{
-    border: 2px solid green;
     display: flex;
     width: 85%;
-    height: 35%;
+    min-height: 0;
     align-content: flex-end;
     justify-content: center;
-    margin-block-start: -2em;
-    margin-block-end: -2em;
+    margin-block-end: 0.5rem;
     color: #f8fafc;
     position: relative;
     text-align: center;
     transition: all 0.15 ease-in-out 0.15s;
+}
+
+.errors:empty{
+    display: none;
 }
 
 .errors #err{
@@ -375,3 +395,194 @@ nav{
 }
 
 /* comments content end*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/* user profile page content */
+
+/* Typography Update */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Profile Page Styles */
+#profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.profile-card {
+    background: rgba(30, 41, 59, 0.7); /* Your secondary-text color with transparency */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2.5rem;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.profile-cover {
+    height: 120px;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+}
+
+.profile-content {
+    padding: 2rem;
+    position: relative;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -5rem; /* Pulls the avatar up into the cover */
+    margin-bottom: 1.5rem;
+}
+
+.avatar-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid #0f172a;
+    overflow: hidden;
+    background: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info h1 {
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+.profile-info .username {
+    color: #2dd4bf;
+    text-align: center;
+    font-weight: 600;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item .count {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.stat-item .label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.profile-bio h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #7c3aed;
+}
+
+.profile-bio p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+    flex: 1;
+    text-align: center;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.btn-primary {
+    background: #7c3aed;
+    color: white;
+}
+
+.btn-secondary {
+    border: 2px solid #1e293b;
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Specific additions for the Tier Maker Profile */
+
+.tier-gallery {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.4); /* Slightly darker than card for contrast */
+    border-radius: 1.5rem;
+    border: 1px dashed #2dd4bf;
+}
+
+.tier-gallery h3 {
+    font-size: 1.1rem;
+    color: #f8fafc;
+    margin-bottom: 1rem;
+}
+
+.gallery-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+}
+
+.empty-state {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.empty-state a {
+    display: block;
+    margin-top: 0.5rem;
+    font-weight: 700;
+}
+
+/* Update the avatar styling to look more "techy" for a Tier Maker app */
+.avatar-circle {
+    background: linear-gradient(45deg, #1e293b, #0f172a);
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.2);
+}
+
+/* Ensure the background stays consistent with your base */
+#profile-container {
+    padding-top: 5vh; /* Space for your fixed header if you add one */
+}

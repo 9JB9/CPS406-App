@@ -3,7 +3,7 @@
 ## Initial setup
 - Install Python on your machine ---> https://www.python.org/downloads/
 - clone the project from github onto your desired project folder ---> git clone https://github.com/9JB9/CPS406-App.git
-- set up the virtual environment in your project folder ---> pythom -m venv venv
+- set up the virtual environment in your project folder ---> python -m venv venv
 
 ## Back-end tools setup
 - Flask (Python library, web framework) ---> pip install flask
@@ -16,7 +16,7 @@
 
 YOU CAN INSTALL ALL OF THEM AT THE SAME TIME JUST RUN:
 
-pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt flask-cors
+pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt flask-cors email-validator
 
 ## Front-end (no setup needed)
 - HTML ---> no setup, web based, runs natively

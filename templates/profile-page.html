@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ user.username }}'s Profile | Tier Maker</title>
+{% endblock %}
+
+{% block body %}
+<main id="profile-container">
+    <div class="profile-card">
+        <div class="profile-cover"></div>
+        
+        <div class="profile-content">
+            <div class="profile-header">
+                <div class="avatar-circle">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed={{ user.username }}" alt="Avatar">
+                </div>
+                <div class="profile-info">
+                    <h1>{{ user.username }}</h1>
+                    <p class="username">{{ user.email }}</p>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="count">0</span>
+                    <span class="label">Tier Lists</span>
+                </div>
+                <div class="stat-item">
+                    <span class="count">0</span>
+                    <span class="label">Rankings</span>
+                </div>
+            </div>
+
+            <div class="tier-gallery">
+                <h3>My Published Lists</h3>
+                <div class="gallery-grid">
+                    <div class="empty-state">
+                        <p>You haven't created any tier lists yet!</p>
+                        <a href="#" id="mint-color">Create your first list</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back to Dashboard</a>
+                <a href="#" class="btn-primary">Account Settings</a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

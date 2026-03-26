@@ -31,17 +31,21 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
-    email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
+    email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Login") # this will be used to represent the button in the html form
 
     def validate_email(self, email):
         existing_user_email = User.query.filter_by(email=email.data).first()
         if not existing_user_email:
-            display_type = "flex"
-            raise ValidationError("Invalid login")
+            raise ValidationError("An account with this email does not exist! Try signing up.")
+    
+    def validate_password(self, password): #checking that the password matches
+        existing_user_password = User.query.filter_by(password=password.data).first() #returns an user I am pretty sure
+        if existing_user_password and not bcrypt.check_password_hash(existing_user_password.password, password.data):
+            raise ValidationError("Wrong Password and/or username!")
 class RegisterForm(FlaskForm):
-    email = StringField(validators=[InputRequired(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
+    email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     username = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Username"})
     password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Sign up")
@@ -58,11 +62,11 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(username=username.data).first()
         if existing_user_username:
-            raise ValidationError("This username is already taken!")
+            raise ValidationError("An account with this username already exists!")
     def validate_email(self, email):
         existing_user_email = User.query.filter_by(email=email.data).first()
         if existing_user_email:
-            raise ValidationError("This email is already taken!")
+            raise ValidationError("An account with this email already exists!")
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -74,9 +78,9 @@ def login():
         user= User.query.filter_by(email=form.email.data).first()
         if user: #if none, that means that the user tried to login with a username that doesn't exist
             login_user(user)
-            return redirect('dashboard') #change home to whatever it is meant to be later, this is just a placeholder for now
-    
-
+            return redirect('profile-page') #apparantly the profile-page should be the real redirector? Let me know if this is wrong
+        else: #I'm adding this in the event that we may want to handle failed logins here later
+            pass
     return render_template('login.html', form=form)
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -97,6 +101,7 @@ def register():
         return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
 
+<<<<<<< HEAD
 #Temporary for testing comment functionality (replace this with a database table)
 comments_list = []
 
@@ -108,6 +113,18 @@ def dashboard ():
             comments_list.append({'user': current_user.username, 'content': content, 'time': datetime.now()})
         return redirect(url_for('dashboard'))  #Redirect to dashboard to show the newly added comment.
     return render_template('dashboard.html', comments=comments_list, user=current_user)    
+=======
+@app.route('/dashboard')
+@login_required
+def dashboard ():
+    return render_template('dashboard.html')
+
+@app.route('/profile-page')
+@login_required # Ensures only logged-in users can access this
+def profilePage():
+    # current_user is provided by flask_login and contains the data from the User class
+    return render_template('profile-page.html', user=current_user)
+>>>>>>> main
 
 if __name__ == "__main__":
     app.run(debug=True)
