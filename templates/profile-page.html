@@ -34,10 +34,21 @@
             <div class="tier-gallery">
                 <h3>My Published Lists</h3>
                 <div class="gallery-grid">
-                    <div class="empty-state">
-                        <p>You haven't created any tier lists yet!</p>
-                        <a href="#" id="mint-color">Create your first list</a>
-                    </div>
+                    
+                    {% if tier_lists %}
+                        {% for tl in tier_lists %}
+                            <form class="tl-row" method = "post" action = "{{url_for('delete_list', index = loop.index0)}}">
+                                <p id = "counter">{{loop.index0 + 1}}</p>
+                                <p id = "tl-title">{{tl['title']}}</p>
+                                <button type = "submit">DELETE</button>
+                            </form>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <p>You haven't created any tier lists yet!</p>
+                            <a href="{{url_for('dashboard')}}" id="mint-color">Create your first list</a>
+                        </div> 
+                    {% endif %}
                 </div>
             </div>
 

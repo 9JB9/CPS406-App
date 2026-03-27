@@ -111,10 +111,15 @@ def dashboard ():
 @app.route('/profile-page')
 @login_required # Ensures only logged-in users can access this
 def profilePage():
+    if current_user.tier_lists: #tierlists is currently just a json string of text, even if it looks like an arrya of dictionaries, python is not interpreting it as such until we run the proper trasnlating methods
+        saved_lists = json.loads(current_user.tier_lists)
+    else:
+        saved_lists = []
     # current_user is provided by flask_login and contains the data from the User class
-    return render_template('profile-page.html', user=current_user)
+    return render_template('profile-page.html', user=current_user, tier_lists = saved_lists)
 
 @app.route('/save-list', methods = ['POST'])
+@login_required
 def save_list():
     #this route ties to the new react build, should tie to the database and save the lists here.
     lst = request.get_json()
@@ -135,5 +140,17 @@ def save_list():
     db.session.commit()
     #we can have a proper return message to send out over here I guess
     return {'message': 'saved gone right!'}, 200 #search these codes on your own if you are curious
+
+@app.route('/get-lists', methods = ['POST', 'GET'])
+@login_required
+def get_lists():
+    if current_user.tier_lists:
+        return json.loads(current_user.tier_lists)
+    
+    return [] #basically returns nothing, if the user has no tier lists available
+
+@app.route('/delete-list')
+def delete_list(index): #this function will be used to delete lists from the database
+    pass
 if __name__ == "__main__":
     app.run(debug=True)
