@@ -189,20 +189,24 @@ def save_list():
     
     alreadyinlistcheck = False
     for savedlist in saved_lists:
-        current_id = savedlist["id"]
-        if current_id == lst["id"]:
+        current_title = savedlist["title"]
+        if current_title == lst["title"]:
             alreadyinlistcheck = True
             break
     
     if not alreadyinlistcheck:
         saved_lists.append(lst)
-        
+    else:
+        for i in range (len(saved_lists)):
+            if saved_lists[i]["title"] == lst["title"]:
+                saved_lists[i] = lst
+                break
     current_user.tier_lists = json.dumps(saved_lists)
 
     #then finally we commit to the database to save everything properly
     db.session.commit()
     #we can have a proper return message to send out over here I guess
-    return {'message': 'saved gone right!'}, 200 #search these codes on your own if you are curious
+    return {'message': 'saved gone right!', "current_list" : lst}, 200 #search these codes on your own if you are curious
 
 @app.route('/get-lists', methods = ['POST', 'GET'])
 @login_required
@@ -212,9 +216,23 @@ def get_lists():
     
     return [] #basically returns nothing, if the user has no tier lists available
 
-@app.route('/delete-list')
+@app.route('/delete-list', methods = ["GET", "POST"])
 def delete_list(): #this function will be used to delete lists from the database
-    pass
+    lst_id = request.args.get("id", type = str)
+
+    #now we locate the list with this id and delete it
+    lists = json.loads(current_user.tier_lists)
+    new_list = []
+    for lst in lists:
+        current_id = lst["id"]
+        if current_id != lst_id:
+            new_list.append(lst)
+
+    current_user.tier_lists = json.dumps(new_list)
+    db.session.commit()
+
+    return redirect(url_for('profilePage'))
+
 if __name__ == "__main__":
     app.run(debug=True)
 
