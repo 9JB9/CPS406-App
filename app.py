@@ -7,10 +7,15 @@ from wtforms.validators import InputRequired, Length, ValidationError, Email
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from datetime import datetime
+import uuid
+import json
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
+app.config["JSON_SORT_KEYS"] = False
+app.json.sort_keys = False
+app.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
@@ -29,6 +34,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(254), nullable=False, unique=True) #email must be unique
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    tier_lists = db.Column(db.Text, nullable=True)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
@@ -130,14 +136,85 @@ def dashboard ():
         viewers.add(current_user.username)
         views += 1
     liked_status = user_likes.get(current_user.username, False)
-    return render_template('dashboard.html', comments=comments_list, user=current_user, likes=likes, liked=liked_status, views=views)
+    if not current_user.tier_lists:
+        return render_template('dashboard.html')
+    
+    saved_lists = json.loads(current_user.tier_lists)
+    index = request.args.get("index", default = None, type = int)
+
+    if index is None or index < 0 or index >= len(saved_lists): #all possible things that could go wrong
+        return render_template('dashboard.html')
+    
+
+    current_list = saved_lists[index]
+    return render_template('dashboard.html', comments=comments_list, user=current_user, likes=likes, liked=liked_status, views=views, current_list=current_list)
+
+    
 
 @app.route('/profile-page')
 @login_required # Ensures only logged-in users can access this
 def profilePage():
-    # current_user is provided by flask_login and contains the data from the User class
-    return render_template('profile-page.html', user=current_user)
+    if current_user.tier_lists: #tierlists is currently just a json string of text, even if it looks like an arrya of dictionaries, python is not interpreting it as such until we run the proper trasnlating methods
+        saved_lists = json.loads(current_user.tier_lists)
+    else:
+        saved_lists = []
 
+    lstLength = len(saved_lists)
+    # current_user is provided by flask_login and contains the data from the User class
+    return render_template('profile-page.html', user=current_user, tier_lists = saved_lists, length=lstLength)
+
+@app.route('/save-list', methods = ['POST'])
+@login_required
+def save_list():
+    #this route ties to the new react build, should tie to the database and save the lists here.
+    lst = request.get_json()
+
+    if not lst:
+        return {'error' : 'no data was received'}, 400 #i love doing errors like this now
+
+    #now we are going to put some checks to both update old list objects, and for safe guarding
+    if "id" not in lst:
+        lst["id"] = str(uuid.uuid4()) #these are just creating new dictionary entries, since lst is a dictionary value holding all the attributes of the lists we create
+    if "comments" not in lst:
+        lst["comments"] = []
+    if "likes" not in lst:
+        lst["likes"] = [] #list to let me track who likes, and not just a counter of how many liked
+    if "views" not in lst:
+        lst["views"] = 0
+    if current_user.tier_lists: #checks if the column for that user's tier lists is empty in the database
+        saved_lists = json.loads(current_user.tier_lists) #if not empty we load them into this variable
+    else:
+        #if they are empty, we declare it as an empty list
+        saved_lists = []
+    
+    alreadyinlistcheck = False
+    for savedlist in saved_lists:
+        current_id = savedlist["id"]
+        if current_id == lst["id"]:
+            alreadyinlistcheck = True
+            break
+    
+    if not alreadyinlistcheck:
+        saved_lists.append(lst)
+        
+    current_user.tier_lists = json.dumps(saved_lists)
+
+    #then finally we commit to the database to save everything properly
+    db.session.commit()
+    #we can have a proper return message to send out over here I guess
+    return {'message': 'saved gone right!'}, 200 #search these codes on your own if you are curious
+
+@app.route('/get-lists', methods = ['POST', 'GET'])
+@login_required
+def get_lists():
+    if current_user.tier_lists:
+        return json.loads(current_user.tier_lists)
+    
+    return [] #basically returns nothing, if the user has no tier lists available
+
+@app.route('/delete-list')
+def delete_list(): #this function will be used to delete lists from the database
+    pass
 if __name__ == "__main__":
     app.run(debug=True)
 
