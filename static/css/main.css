@@ -426,6 +426,7 @@ body {
 .profile-info h1 {
     font-size: 1.75rem;
     text-align: center;
+    color: #f8fafc; 
 }
 
 .profile-info .username {
@@ -512,6 +513,7 @@ body {
     background: rgba(15, 23, 42, 0.4); /* Slightly darker than card for contrast */
     border-radius: 1.5rem;
     border: 1px dashed #2dd4bf;
+    overflow: hidden;
 }
 
 .tier-gallery h3 {
@@ -522,9 +524,37 @@ body {
 
 .gallery-grid {
     display: flex;
+    overflow-y: auto;
     justify-content: center;
     align-items: center;
     min-height: 100px;
+    overflow-x: hidden;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.tl-row{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.tl-row-row{
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    align-content: center;
+    justify-items: center;
+}
+
+#tl-title{
+    text-align: center;
+}
+
+#counter {
+    color: #f8fafc;
+    text-align: center;
 }
 
 .empty-state {
