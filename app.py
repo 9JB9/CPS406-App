@@ -12,6 +12,9 @@ app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
+app.config["JSON_SORT_KEYS"] = False
+app.json.sort_keys = False
+app.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
@@ -106,7 +109,19 @@ def register():
 @app.route('/dashboard')
 @login_required
 def dashboard ():
-    return render_template('dashboard.html')
+
+    if not current_user.tier_lists:
+        return render_template('dashboard.html')
+    
+    saved_lists = json.loads(current_user.tier_lists)
+    index = request.args.get("index", default = None, type = int)
+
+    if index is None or index < 0 or index >= len(saved_lists): #all possible things that could go wrong
+        return render_template('dashboard.html')
+    
+
+    current_list = saved_lists[index]
+    return render_template('dashboard.html', current_list=current_list)
 
 @app.route('/profile-page')
 @login_required # Ensures only logged-in users can access this
@@ -115,8 +130,10 @@ def profilePage():
         saved_lists = json.loads(current_user.tier_lists)
     else:
         saved_lists = []
+
+    lstLength = len(saved_lists)
     # current_user is provided by flask_login and contains the data from the User class
-    return render_template('profile-page.html', user=current_user, tier_lists = saved_lists)
+    return render_template('profile-page.html', user=current_user, tier_lists = saved_lists, length=lstLength)
 
 @app.route('/save-list', methods = ['POST'])
 @login_required
@@ -150,7 +167,7 @@ def get_lists():
     return [] #basically returns nothing, if the user has no tier lists available
 
 @app.route('/delete-list')
-def delete_list(index): #this function will be used to delete lists from the database
+def delete_list(): #this function will be used to delete lists from the database
     pass
 if __name__ == "__main__":
     app.run(debug=True)

@@ -22,12 +22,8 @@
 
             <div class="profile-stats">
                 <div class="stat-item">
-                    <span class="count">0</span>
+                    <span class="count">{{length}}</span>
                     <span class="label">Tier Lists</span>
-                </div>
-                <div class="stat-item">
-                    <span class="count">0</span>
-                    <span class="label">Rankings</span>
                 </div>
             </div>
 
@@ -38,9 +34,11 @@
                     {% if tier_lists %}
                         {% for tl in tier_lists %}
                             <form class="tl-row" method = "post" action = "{{url_for('delete_list', index = loop.index0)}}">
-                                <p id = "counter">{{loop.index0 + 1}}</p>
-                                <p id = "tl-title">{{tl['title']}}</p>
-                                <button type = "submit">DELETE</button>
+                                <div class="tl-row-row">
+                                    <p id = "counter">{{loop.index0 + 1}}.</p>
+                                    <a href = "{{url_for('dashboard', index = loop.index0)}}" id = "tl-title">{{tl['title']}}</a>
+                                    <button type = "submit">DELETE</button>
+                                </div>
                             </form>
                         {% endfor %}
                     {% else %}
