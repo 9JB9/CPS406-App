@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<title>Search New Lists</title>
+{% endblock %}
+
+
+{% block body %}
+<header class = "search-header">
+    <nav id = "search-nav">
+        <div class="nav-left-header">
+            <a href = "{{url_for('index')}}">TierDrop</a>
+        </div>
+        <div class="nav-search">
+            <form method = "POST">
+                <input type = "text" name = "search" placeholder = "Search lists..">
+                <button type = "submit"> Search </button>
+            </form>
+        </div>
+        <div class="nav-right-header">
+            <a href = "{{url_for('profilePage')}}">
+                <img src = "{{url_for('static', filename = 'user_img.png')}}" alt = "profile-thumbnail">
+            </a>
+        </div>
+    </nav>
+</header>
+<main id = "search-main">
+    <section class = "lists">
+        {% if all_lists %}
+            {% for lst in all_lists %}
+                <div class = "list-card">
+                    <div class="card-header">
+                        <div class="card-header-text">
+                            <h3>{{ lst.title }}</h3>
+                            <p>{{ lst.description }}</p>
+                            <p>By {{ lst.owner_username }}</p>
+                        </div>
+
+                        <div class="card-header-btn">
+                            <a href = ""> View this list</a>
+                        </div>
+                    </div>
+                    {% if lst.thumbnail %}
+                        <img src = "{{ lst.thumbnail }}" alt = "{{ lst.title }}">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+                <p>No lists found/available</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

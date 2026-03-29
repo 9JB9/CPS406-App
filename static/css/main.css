@@ -677,3 +677,151 @@ body {
 #profile-container {
     padding-top: 5vh; /* Space for your fixed header if you add one */
 }
+
+
+/*list browsing page content start*/
+
+#search-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.nav-left-header{
+    width: 20%;
+    text-align: center;
+}
+
+.nav-left-header a{
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    color: transparent;
+    background-clip: text;
+}
+.nav-right-header{
+    height: 100%;
+    width: 20%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-right-header a{
+    height: 100%;
+
+}
+
+.nav-right-header img{
+    border: 2px solid #0f172a;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.nav-search{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-search form{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-search form input{
+    width: 75%;
+    height: 50%;
+    border-radius: 4rem;
+    border: 1px solid #0f172a;
+    padding-inline: 10px 0;
+}
+
+.nav-search form button{
+    width: 20%;
+}
+
+.list-card{
+    position: relative;
+    height: 50vh;
+    width: 100%;
+    border-radius: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    /* border-left: 2px solid #7c3aed;
+    border-right: 2px solid #7c3aed;
+    border-bottom: 2px solid #7c3aed; */
+    overflow: hidden;
+    box-sizing: border-box;
+    background: #0f172a;
+}
+
+.list-card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 4px;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.lists{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em; 
+    align-items: center;
+    width: 100%;
+}
+
+.card-header{
+    height: 20%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    border-top-left-radius: 4rem;
+    border-top-right-radius: 4rem;
+    z-index: 0;
+    gap: 1em;
+    padding-block: 2em;
+}
+
+.card-header-text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-header-btn{
+    border: 
+}
+.list-card img{
+    height: 80%;
+    width: 100%;
+    object-fit: contain;
+}
+
+#search-main{
+    margin-top: 2rem;
+}
+/*list browsing page content end*/

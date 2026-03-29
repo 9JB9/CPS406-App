@@ -245,6 +245,7 @@ def get_lists():
     return [] #basically returns nothing, if the user has no tier lists available
 
 @app.route('/delete-list', methods = ["GET", "POST"])
+@login_required
 def delete_list(): #this function will be used to delete lists from the database
     lst_id = request.args.get("id", type = str)
 
@@ -260,6 +261,48 @@ def delete_list(): #this function will be used to delete lists from the database
     db.session.commit()
 
     return redirect(url_for('profilePage'))
+
+@app.route('/search-page', methods = ['GET','POST'])
+@login_required
+def search_page():
+    #in this page we are going to pull every user, and all their lists
+    #we are going to make them visible here.
+    #then we are going to figure out a way to make it so that people can't edit the lists
+    #they can only check and comment.
+
+    #for now let's just make sure such things even load
+    #for the sake of simplicity for now, let's just make the lists load with the image of the S tier item in the list
+
+    all_lists = [] #for this page we dont acc care about the user, we just want all the lists. this list will hold all the lists
+    all_users = User.query.filter(User.tier_lists.isnot(None)).all() #brings up all the users who's lists are not empty
+    
+    if request.method == 'POST':
+        return redirect(url_for('search_page'))
+    else:
+        for user in all_users:
+            lists = json.loads(user.tier_lists)
+
+            for lst in lists:
+                thumbnail = None
+                s_tier_items = lst["payload"]["S"]["containedElementIds"]
+
+                for item in s_tier_items: #just picking the very first S tier image as the thumbnail
+                    if item.get("image"):
+                        thumbnail = item["image"]
+                        break
+
+                all_lists.append({
+                    "owner_username" : user.username,
+                    "title" : lst["title"],
+                    "description" : lst["description"],
+                    "payload" : lst["payload"],
+                    "comments" : lst.get("comments", []),
+                    "thumbnail" : thumbnail,
+                    "id" : lst.get("id")
+                })
+
+
+    return render_template('search.html', all_lists=all_lists)
 
 if __name__ == "__main__":
     app.run(debug=True)
