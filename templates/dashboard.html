@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/static/vite.svg" />typical comment layoutcomment 
+    <link rel="icon" type="image/svg+xml" href="/static/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tier-list</title>
-    <script type="module" crossorigin src="/static/assets/index-CEegr1s6.js"></script>
+    <script type="module" crossorigin src="/static/assets/index-CVRQa5rG.js"></script>
     <link rel="stylesheet" crossorigin href="/static/assets/index-CoVxk5mt.css">
   </head>
   <body>
@@ -13,13 +13,11 @@
       window.currentlist = {{current_list|tojson if current_list else 'null'}}
     </script>
     <div id="root"></div>
-
-    <!-- Action Bar Section -->
-    <div class="action-bar">
+    <!-- <div class="action-bar"> -->
       <!-- Placeholder button -->
-      <button disabled>Subscribe</button>
+      <!-- <button disabled>Subscribe</button> -->
       <!-- Active button(s) -->
-      <form method="POST" style="display:inline;">
+      <!-- <form method="POST" style="display:inline;">
         <button type="submit" name="action" value="like" class="like-button">
           {% if liked %}
             ❤️
@@ -28,32 +26,44 @@
           {% endif %}
           <span class="likes-count">{{likes}}</span>
         </button>
-      </form>
+      </form> -->
       <!-- Additional Placeholder buttons -->
-      <button disabled>Share</button>
-      <button disabled>Download</button>
+      <!-- <button disabled>Share</button>
+      <button disabled>Download</button> -->
       <!-- Views counter -->
-      <span class="views-count">Views: {{views}}</span>
-    </div>
+      <!-- <span class="views-count">Views: {{views}}</span> -->
+    <!-- </div> -->
 
     <!-- Comments Section  -->
     <div class="comments">
       <h2>Comments</h2>
-      <form method="POST">
-        <textarea name="comment-input" placeholder="Add a new comment"></textarea>
-        <button type="submit" name="action" value="comment">Send</button>
-      </form>
 
-      <div class="comments-preview">
-        {% for comment in comments %}
-          <div class="comment">
-            <p class="comment-author">
-              <strong>{{ comment.user }}</strong> ({{ comment.time.strftime("%Y-%m-%d %H:%M") }})
-            </p>
-            <p class="comment-body"> {{ comment.content }}</p>
-          </div>
-        {% endfor %}
-      </div>
+      {% if current_list %}
+        <form method="POST" action="{{ url_for('post_comment') }}">
+          <input type="hidden" name="title" value="{{ current_list.title }}">
+          <input type="hidden" name="payload" value='{{ current_list.payload|tojson }}'>
+          <input type = "hidden" name = "index" value = "{{ request.args.get('index') }}">
+          <textarea name="comment-input" placeholder="Add a new comment"></textarea>
+          <button type="submit" name="action" value="comment">Send</button>
+        </form>
+
+        <div class="comments-preview">
+          {% for comment in current_list.comments %}
+            <div class="comment">
+              <p class="comment-author">
+                <strong>{{ comment.user }}</strong> ({{ comment.time }})
+              </p>
+              <p class="comment-body">{{ comment.content }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <form>
+          <textarea placeholder="Save this list before commenting" disabled></textarea>
+          <button type="button" disabled>Send</button>
+        </form>
+      {% endif %}
     </div>
+
   </body>
 </html>

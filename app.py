@@ -108,34 +108,21 @@ def register():
     return render_template('signup.html', form=form)
 
 #Temporary variables for testing comment functionality and like/views functionality (replace this with a database table or other tracking method as needed)
-comments_list = []
-user_likes = {} # Dictionary to track the state of user likes (Key = username, Value = True/False) to ensure users can only like once.
-likes = 0 # Count likes
-views = 0 # Count page views
-viewers = set() # Track unique viewers to prevent view count from updating on page refreshes by the same user. Improve this later using session tracking or cookies.
+#user_likes = {} # Dictionary to track the state of user likes (Key = username, Value = True/False) to ensure users can only like once.
+#likes = 0 # Count likes
+#views = 0 # Count page views
+#viewers = set() # Track unique viewers to prevent view count from updating on page refreshes by the same user. Improve this later using session tracking or cookies.
 
-@app.route('/dashboard', methods=['POST', 'GET'])
+@app.route('/dashboard', methods=['GET'])
 def dashboard ():
-    global likes
-    global views
-    if request.method == 'POST':
-        user_action = request.form.get('action')
-        if user_action == 'comment':
-            content = request.form.get('comment-input')
-            if content is not None and content.strip() != "":
-                comments_list.append({'user': current_user.username, 'content': content, 'time': datetime.now()})
-        elif user_action == 'like':
-            if user_likes.get(current_user.username) == True:
-                likes -= 1
-                user_likes[current_user.username] = False
-            else:
-                likes += 1
-                user_likes[current_user.username] = True
-        return redirect(url_for('dashboard'))  #Redirect to dashboard to show the newly added comment or incremented like.
-    if current_user.username not in viewers:
-        viewers.add(current_user.username)
-        views += 1
-    liked_status = user_likes.get(current_user.username, False)
+    #global likes
+    #global views
+    
+    # if current_user.username not in viewers:
+    #     viewers.add(current_user.username)
+    #     views += 1
+    #liked_status = user_likes.get(current_user.username, False)
+
     if not current_user.tier_lists:
         return render_template('dashboard.html')
     
@@ -145,11 +132,40 @@ def dashboard ():
     if index is None or index < 0 or index >= len(saved_lists): #all possible things that could go wrong
         return render_template('dashboard.html')
     
-
-    current_list = saved_lists[index]
-    return render_template('dashboard.html', comments=comments_list, user=current_user, likes=likes, liked=liked_status, views=views, current_list=current_list)
-
     
+    current_list = saved_lists[index]
+    if "comments" not in current_list: #doing this just to be safe
+        current_list["comments"] = []
+    #return render_template('dashboard.html', comments=comments_list, user=current_user, likes=likes, liked=liked_status, views=views, current_list=current_list)
+    return render_template('dashboard.html', user = current_user, current_list=current_list)
+
+@app.route('/post-comment', methods=['POST'])
+@login_required
+def post_comment():
+    content = request.form.get('comment-input')
+    title = request.form.get('title')
+    payload_raw = request.form.get('payload') 
+    index = request.form.get('index', type=int)
+    if not content or not content.strip(): #strip to deal with white spaces and stuff like that. so we get only proper real comments
+        return redirect(url_for('dashboard'))
+
+    if not current_user.tier_lists:
+        return redirect(url_for('dashboard'))
+
+    payload = json.loads(payload_raw)
+    savedlists = json.loads(current_user.tier_lists)
+
+    for lst in savedlists:
+        if lst["title"] == title and lst["payload"] == payload:
+            if "comments" not in lst:
+                lst["comments"] = []
+            
+            lst["comments"].append ({"user" : current_user.username, "content" : content.strip(), "time": datetime.now().strftime("%Y-%m-%d %H:%M")})
+            break
+    
+    current_user.tier_lists = json.dumps(savedlists)
+    db.session.commit()
+    return redirect(url_for('dashboard', index = index))
 
 @app.route('/profile-page')
 @login_required # Ensures only logged-in users can access this
@@ -187,26 +203,38 @@ def save_list():
         #if they are empty, we declare it as an empty list
         saved_lists = []
     
-    alreadyinlistcheck = False
-    for savedlist in saved_lists:
-        current_title = savedlist["title"]
-        if current_title == lst["title"]:
-            alreadyinlistcheck = True
+    #alreadyinlistcheck = False
+    exact_match_index = None
+    only_title_match = None
+
+    for i in range(len(saved_lists)):
+        current_title = saved_lists[i]["title"]
+        current_payload = saved_lists[i]["payload"]
+        if current_title == lst["title"] and current_payload == lst["payload"]:
+            exact_match_index = i
             break
-    
-    if not alreadyinlistcheck:
-        saved_lists.append(lst)
-    else:
+
+    if exact_match_index == None:
         for i in range (len(saved_lists)):
             if saved_lists[i]["title"] == lst["title"]:
-                saved_lists[i] = lst
+                only_title_match = i
                 break
+    
+    if exact_match_index != None:
+        saved_lists[exact_match_index] = lst
+        saved_index = exact_match_index
+    elif only_title_match != None:
+        saved_lists[only_title_match] = lst
+        saved_index = only_title_match
+    else:
+        saved_lists.append(lst)
+        saved_index = len(saved_lists) - 1
     current_user.tier_lists = json.dumps(saved_lists)
 
     #then finally we commit to the database to save everything properly
     db.session.commit()
     #we can have a proper return message to send out over here I guess
-    return {'message': 'saved gone right!', "current_list" : lst}, 200 #search these codes on your own if you are curious
+    return {'message': 'saved gone right!', "current_list" : lst, "index" : saved_index}, 200 #search these codes on your own if you are curious
 
 @app.route('/get-lists', methods = ['POST', 'GET'])
 @login_required
