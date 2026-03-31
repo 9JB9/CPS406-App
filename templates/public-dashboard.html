@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/static/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +12,7 @@
   <body>
     <script>
       window.currentlist = {{current_list|tojson if current_list else 'null'}}
+      window.isPublicView = true
     </script>
     <div id="root"></div>
     <!-- <div class="action-bar"> -->
@@ -40,10 +41,9 @@
       <h2>Comments</h2>
 
       {% if current_list %}
-        <form method="POST" action="{{ url_for('post_comment') }}">
-          <input type="hidden" name="title" value="{{ current_list.title }}">
-          <input type="hidden" name="payload" value='{{ current_list.payload|tojson }}'>
-          <input type = "hidden" name = "index" value = "{{ request.args.get('index') }}">
+        <form method="POST" action="{{ url_for('post_comment_other_list') }}">
+          <input type = "hidden" name = "owner_id" value = "{{ list_owner.id }}">
+          <input type = "hidden" name = "list_id" value = "{{ current_list.id }}">
           <textarea name="comment-input" placeholder="Add a new comment"></textarea>
           <button type="submit" name="action" value="comment">Send</button>
         </form>

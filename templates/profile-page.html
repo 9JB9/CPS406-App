@@ -33,7 +33,7 @@
                     
                     {% if tier_lists %}
                         {% for tl in tier_lists %}
-                            <form class="tl-row" method = "post" action = "{{url_for('delete_list', index = loop.index0)}}">
+                            <form class="tl-row" method = "POST" action = "{{url_for('delete_list', id = tl['id'])}}">
                                 <div class="tl-row-row">
                                     <p id = "counter">{{loop.index0 + 1}}.</p>
                                     <a href = "{{url_for('dashboard', index = loop.index0)}}" id = "tl-title">{{tl['title']}}</a>
