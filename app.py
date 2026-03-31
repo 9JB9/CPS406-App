@@ -235,7 +235,7 @@ def save_list():
     db.session.commit()
     #we can have a proper return message to send out over here I guess
     return {'message': 'saved gone right!', "current_list" : lst, "index" : saved_index}, 200 #search these codes on your own if you are curious
-
+    #return redirect(url_for('dashboard', index = saved_index))
 @app.route('/get-lists', methods = ['POST', 'GET'])
 @login_required
 def get_lists():
@@ -292,6 +292,7 @@ def search_page():
                         break
 
                 all_lists.append({
+                    "owner_id" : user.id,
                     "owner_username" : user.username,
                     "title" : lst["title"],
                     "description" : lst["description"],
@@ -304,6 +305,94 @@ def search_page():
 
     return render_template('search.html', all_lists=all_lists)
 
+@app.route('/view-other-list', methods=['GET', 'POST'])
+@login_required
+def view_other_list():
+    if request.method == 'POST':
+        owner_id = request.form.get("owner_id", type = int)
+        list_id = request.form.get("list_id", type = str)
+    else:
+        owner_id = request.args.get('owner_id', type = int)
+        list_id = request.args.get('list_id', type = str)
+
+    owner = User.query.get_or_404(owner_id) #or404 to shoot an error in case that user doesn't exist (this likely won't happen with the current flow we have)
+    if not owner.tier_lists:
+        return redirect(url_for('search_page')) #send the user back to the list browser page, if the list the owner of the list they clicked on doesn't actually have any lists. I'm putting this here in case of bad flow, or data mismanagement
+    
+    saved_lists = json.loads(owner.tier_lists)
+
+    target_list = None
+    for lst in saved_lists:
+        if lst.get("id") == list_id:
+            target_list = lst
+            break
+    
+    if not target_list:
+        return redirect(url_for('search_page')) #send the user back to browser page, if the target list could not be found (just a simple error check to prevent the page from crashing)
+
+    return render_template ('public-dashboard.html', current_list = target_list, list_owner = owner)
+
+@app.route('/save-other-user-list', methods = ['POST']) # this shouldnt even exist
+@login_required
+def save_other_user_list():
+    return {"error": "forbidden"}, 403
+    # data = request.get_json() #pulls up list that is being saved
+
+    # owner_id = data.get("owner_id")
+    # list_id = data.get("list_id")
+    # updated_list = data.get("list_data")
+
+    # owner = User.query.get_or_404(owner_id)
+
+    # if owner.tier_lists:
+    #     saved_lists = json.loads(owner.tier_lists)
+    # else:
+    #     saved_lists = []
+    
+    # found_check = False
+    # for i, lst in enumerate(saved_lists): #enumerate just iterates over saved_lists, but it pumps out both index and value, very useful here
+    #     if lst.get("id") == list_id:
+    #         saved_lists[i] = updated_list
+    #         found_check = True
+    #         break
+    
+    # if not found_check:
+    #     return {"error": "list not found"}, 404
+
+    # owner.tier_lists = json.dumps(saved_lists)
+    # db.session.commit()
+
+    # return {"message" : "saved successfully"}, 200
+
+
+#comments the way are set up will need separate handling to work
+
+@app.route('/post-comment-other-list', methods = ['POST'])
+@login_required
+def post_comment_other_list():
+    owner_id = request.form.get("owner_id", type = int)
+    list_id = request.form.get("list_id", type = str)
+    content = request.form.get("comment-input", "").strip()
+
+    if not content:
+        return redirect(url_for('search_page')) #send user back to the browser page if something goes wrong
+
+    owner = User.query.get_or_404(owner_id)
+    if owner.tier_lists:
+        saved_lists = json.loads(owner.tier_lists)
+    else:
+        saved_lists = []
+
+    for lst in saved_lists:
+        if lst.get('id') == list_id:
+            lst.setdefault('comments', []).append({ 'user': current_user.username, 'content': content, 'time' : datetime.now().strftime('%Y-%m-%d %H:%M')})
+            break
+    
+    owner.tier_lists = json.dumps(saved_lists)
+    db.session.commit()
+
+
+    return redirect(url_for('view_other_list', owner_id = owner_id, list_id = list_id))
 if __name__ == "__main__":
     app.run(debug=True)
 

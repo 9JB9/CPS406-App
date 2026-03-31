@@ -37,9 +37,12 @@
                             <p>By {{ lst.owner_username }}</p>
                         </div>
 
-                        <div class="card-header-btn">
-                            <a href = ""> View this list</a>
-                        </div>
+                        <form class="card-header-btn" method = "POST" action = "{{ url_for('view_other_list')}}">
+                            <input type = "hidden" name = "owner_id" value = "{{ lst.owner_id }}">
+                            <input type = "hidden" name = "list_id" value = "{{ lst.id }}">
+                            <input type = "hidden" name = "owner_name" value = "{{ lst.owner_username }}">
+                            <button type = "submit"> View this list</button>
+                        </form>
                     </div>
                     {% if lst.thumbnail %}
                         <img src = "{{ lst.thumbnail }}" alt = "{{ lst.title }}">
