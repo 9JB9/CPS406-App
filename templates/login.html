@@ -23,15 +23,12 @@
             <div class="log-form-div">
                 <p>Password</p>
                 {{form.password}}
-                <a href = "">Forgot your password?</a>
+                <a href = "{{ url_for('recovery') }}">Forgot your password?</a>
             </div>
            <div class="log-form-submit">
                 {{form.submit}}
-                <a href = "">Don't have an account? Sign up here!</a>
+                <a href = "{{ url_for('register') }}">Don't have an account? Sign up here!</a>
            </div>
-            
-            
-            
         </form>
     </main>
 {% endblock %}

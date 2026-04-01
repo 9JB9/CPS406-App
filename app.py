@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_manager, LoginManager, login_user, login_required, current_user
+from flask_login import UserMixin, login_manager, LoginManager, login_user, login_required, current_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError, Email
@@ -35,6 +35,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     tier_lists = db.Column(db.Text, nullable=True)
+    sec_questions = db.Column(db.Text, nullable = True)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
@@ -104,9 +105,137 @@ def register():
         new_user=User(email=form.email.data, username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('login')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
+        login_user(new_user)
+        return redirect(url_for('sec_form')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
 
+@app.route('/sec_form', methods = ['GET', 'POST'])
+@login_required
+def sec_form():
+    if request.method == 'GET':
+        return render_template('sec-questions.html')
+    else:
+
+        #the questions
+        q1 = request.form.get('q1')
+        q2 = request.form.get('q2')
+        q3 = request.form.get('q3')
+
+        #the answers
+        a1 = request.form.get('a1').strip().lower()
+        a2 = request.form.get('a2').strip().lower()
+        a3 = request.form.get('a3').strip().lower()
+
+        chosen_questions = set([q1, q2, q3])
+        if len(chosen_questions) < 3:
+            flash("Please pick 3 different questions")
+            return redirect(url_for('sec_form'))
+        
+        hashed_a1 = bcrypt.generate_password_hash(a1).decode('utf-8')
+        hashed_a2 = bcrypt.generate_password_hash(a2).decode('utf-8')
+        hashed_a3 = bcrypt.generate_password_hash(a3).decode('utf-8')
+
+        recovery_data = [(q1, hashed_a1), (q2, hashed_a2), (q3, hashed_a3)]
+        recovery_str = json.dumps(recovery_data)
+
+        current_user.sec_questions = recovery_str
+        db.session.commit()
+        return redirect(url_for('profilePage'))
+
+@app.route('/recovery', methods=['GET', 'POST'])
+def recovery():
+    if request.method == 'GET':
+        recovery_user_id = session.get('recovery_user_id')
+        if not recovery_user_id:
+            return render_template('recovery-page.html')
+
+        recovery_user = db.session.get(User, recovery_user_id)
+        if not recovery_user or not recovery_user.sec_questions:
+            session.pop('recovery_user_id', None)
+            session.pop('recovery_verified', None)
+            flash("Couldn't load recovery questions for that account.")
+            return redirect(url_for('recovery'))
+
+        recovery_data = json.loads(recovery_user.sec_questions)
+        q1 = recovery_data[0][0]
+        q2 = recovery_data[1][0]
+        q3 = recovery_data[2][0]
+
+        return render_template('recovery-page.html', q1=q1, q2=q2, q3=q3)
+    else:
+        recovery_user_id = session.get('recovery_user_id')
+        if not recovery_user_id:
+            email = request.form.get('email').strip().lower()
+            recovery_user = User.query.filter_by(email=email).first()
+
+            if not recovery_user or not recovery_user.sec_questions:
+                flash("We couldn't find recovery questions for that email.")
+                return redirect(url_for('recovery'))
+
+            session['recovery_user_id'] = recovery_user.id
+            session.pop('recovery_verified', None)
+            return redirect(url_for('recovery'))
+
+        recovery_user = db.session.get(User, recovery_user_id)
+        if not recovery_user or not recovery_user.sec_questions:
+            session.pop('recovery_user_id', None)
+            session.pop('recovery_verified', None)
+            flash("Recovery session expired. Please try again.")
+            return redirect(url_for('recovery'))
+
+        recovery_data = json.loads(recovery_user.sec_questions)
+        a1 = recovery_data[0][1]
+        a2 = recovery_data[1][1]
+        a3 = recovery_data[2][1]
+
+        #check that the answers match 
+        form_a1 = request.form.get('form_a1').strip().lower()
+        form_a2 = request.form.get('form_a2').strip().lower()
+        form_a3 = request.form.get('form_a3').strip().lower()
+
+        check1 = bcrypt.check_password_hash(a1, form_a1)
+        check2 = bcrypt.check_password_hash(a2, form_a2)
+        check3 = bcrypt.check_password_hash(a3, form_a3)
+
+        if check1 and check2 and check3:
+            session['recovery_verified'] = True
+            return redirect(url_for('newpass'))
+        else:
+            flash("incorrect answer(s)")
+            return redirect(url_for('recovery'))
+
+@app.route('/newpassword', methods = ['GET', 'POST'])
+def newpass():
+    recovery_user_id = session.get('recovery_user_id')
+    recovery_verified = session.get('recovery_verified')
+
+    if not recovery_user_id or not recovery_verified:
+        flash("Please complete account recovery first.")
+        return redirect(url_for('recovery'))
+
+    recovery_user = db.session.get(User, recovery_user_id)
+    if not recovery_user:
+        session.pop('recovery_user_id', None)
+        session.pop('recovery_verified', None)
+        flash("Recovery session expired. Please try again.")
+        return redirect(url_for('recovery'))
+
+    if request.method == 'GET':
+        return render_template('new-password.html')
+    else:
+        password = request.form.get('newpass')
+        passrepeated = request.form.get('newpassrepeated')
+
+        if password == passrepeated:
+            newpassword = bcrypt.generate_password_hash(password)
+            recovery_user.password = newpassword
+            db.session.commit()
+            session.pop('recovery_user_id', None)
+            session.pop('recovery_verified', None)
+            return redirect(url_for('login'))
+        else:
+            flash("the passwords dont match")
+            return redirect(url_for('newpass'))
 #Temporary variables for testing comment functionality and like/views functionality (replace this with a database table or other tracking method as needed)
 #user_likes = {} # Dictionary to track the state of user likes (Key = username, Value = True/False) to ensure users can only like once.
 #likes = 0 # Count likes
@@ -276,8 +405,44 @@ def search_page():
     all_lists = [] #for this page we dont acc care about the user, we just want all the lists. this list will hold all the lists
     all_users = User.query.filter(User.tier_lists.isnot(None)).all() #brings up all the users who's lists are not empty
     
-    if request.method == 'POST':
-        return redirect(url_for('search_page'))
+    if request.method == 'POST': #we get over here when user passes input to the search bar
+        user_input = request.form.get("search") #the entire string
+        user_input_list = user_input.split()
+        
+        for user in all_users:
+            lists = json.loads(user.tier_lists)
+
+            for lst in lists:
+                #check title of the list
+                current_title = lst["title"]
+                current_description = lst["description"]
+                s_tier_items = lst["payload"]["S"]["containedElementIds"]
+                thumbnail = None
+
+                check = False
+
+                for wrd in user_input_list:
+                    if wrd in current_title or wrd in current_description or current_title == '':
+                        check = True
+                        break
+                
+                if check: #if the word is found, then it is valid and we set out to render that list
+                    for item in s_tier_items:
+                        if item.get("image"):
+                            thumbnail = item["image"]
+                            break
+
+                    all_lists.append({
+                    "owner_id" : user.id,
+                    "owner_username" : user.username,
+                    "title" : lst["title"],
+                    "description" : lst["description"],
+                    "payload" : lst["payload"],
+                    "comments" : lst.get("comments", []),
+                    "thumbnail" : thumbnail,
+                    "id" : lst.get("id")
+                })
+                    
     else:
         for user in all_users:
             lists = json.loads(user.tier_lists)
@@ -302,8 +467,7 @@ def search_page():
                     "id" : lst.get("id")
                 })
 
-
-    return render_template('search.html', all_lists=all_lists)
+    return render_template('search.html', all_lists = all_lists)
 
 @app.route('/view-other-list', methods=['GET', 'POST'])
 @login_required
@@ -391,8 +555,13 @@ def post_comment_other_list():
     owner.tier_lists = json.dumps(saved_lists)
     db.session.commit()
 
-
     return redirect(url_for('view_other_list', owner_id = owner_id, list_id = list_id))
+
+@app.route('/logout', methods = ['POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 if __name__ == "__main__":
     app.run(debug=True)
 

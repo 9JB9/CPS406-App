@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %} 
+    <main id = "reg-main">
+        <form method = "POST" class = "recovery-form">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="errors">
+                        {% for message in messages %}
+                            <p id="err">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% if q1 and q2 and q3 %}
+                <div class="recovery-form-div">
+                    <p>Q1. {{q1}}?</p>
+                    <input type = "text" name = "form_a1" placeholder="Your answer" required>
+                </div>
+                <div class="recovery-form-div">
+                    <p>Q2. {{q2}}?</p>
+                    <input type = "text" name = "form_a2" placeholder="Your answer" required>
+                </div>
+                <div class="recovery-form-div">
+                    <p>Q3. {{q3}}?</p>
+                    <input type = "text" name = "form_a3" placeholder="Your answer" required>
+                </div>
+            {% else %}
+                <div class="recovery-form-div">
+                    <p>Enter the email for the account you want to recover</p>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+            {% endif %}
+            <button type = "submit">Submit</button>
+        </form>
+    </main>
+{% endblock %}

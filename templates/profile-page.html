@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block body %}
+<header>
+    <nav id = "nav-pfp">
+        <form method = 'POST' action = "{{ url_for('logout') }}">
+            <button type = "submit">Logout</button>
+        </form>
+    </nav>
+</header>
 <main id="profile-container">
     <div class="profile-card">
         <div class="profile-cover"></div>
@@ -44,7 +51,7 @@
                     {% else %}
                         <div class="empty-state">
                             <p>You haven't created any tier lists yet!</p>
-                            <a href="{{url_for('dashboard')}}" id="mint-color">Create your first list</a>
+                            <a href="{{ url_for('dashboard') }}" id="mint-color">Create your first list</a>
                         </div> 
                     {% endif %}
                 </div>
@@ -52,7 +59,7 @@
 
             <div class="profile-actions">
                 <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back to Dashboard</a>
-                <a href="{{ url_for('search_page')}}" class="btn-primary">Browse Lists</a>
+                <a href="{{ url_for('search_page') }}" class="btn-primary">Browse Lists</a>
             </div>
         </div>
     </div>

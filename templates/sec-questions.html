@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block body %} 
+
+<main id = "reg-main">
+    <form method = 'POST' action = '' class = "sec-form">
+        <h1>Security Form</h1>
+        <div class="sec-formd-div">
+            <label> Question 1: </label>
+            <select name = "q1">
+                <option value = "maiden_name"> Mother's maiden name </option>
+                <option value = "favorite_food"> Favourite food </option>
+                <option value = "first_car"> Model of your first car</option>
+            </select>
+            <input type = "text" name = "a1" placeholder="Your answer..." required>
+        </div>
+        <div class="sec-formd-div">
+            <label> Question 2: </label>
+            <select name = "q2">
+                <option value = "favorite_food"> Favourite food </option>
+                <option value = "maiden_name"> Mother's maiden name </option>
+                <option value = "first_car"> Model of your first car</option>
+            </select>
+            <input type = "text" name = "a2" placeholder="Your answer..." required>
+        </div>
+        <div class="sec-formd-div">
+            <label> Question 3: </label>
+            <select name = "q3">
+                <option value = "first_car"> Model of your first car</option>
+                <option value = "maiden_name"> Mother's maiden name </option>
+                <option value = "favorite_food"> Favourite food </option>
+            </select>
+            <input type = "text" name = "a3" placeholder="Your answer..." required>
+        </div>
+        <button type = "submit">Save Recovery Questions</button>
+    </form>
+</main>
+
+{% endblock %}
