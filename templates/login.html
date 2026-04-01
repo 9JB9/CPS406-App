@@ -15,6 +15,11 @@
                         <p id = "err">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <p id = "err">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
             </div>
             <div class="log-form-div {{'has-error' if form.email.errors else ''}}">
                 <p>Email</p>

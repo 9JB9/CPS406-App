@@ -48,7 +48,7 @@ class LoginForm(FlaskForm):
             raise ValidationError("An account with this email does not exist! Try signing up.")
     
     def validate_password(self, password): #checking that the password matches
-        existing_user_password = User.query.filter_by(password=password.data).first() #returns an user I am pretty sure
+        existing_user_password = User.query.filter_by(email=self.email.data).first() #returns an user I am pretty sure
         if existing_user_password and not bcrypt.check_password_hash(existing_user_password.password, password.data):
             raise ValidationError("Wrong Password and/or username!")
 class RegisterForm(FlaskForm):
@@ -82,7 +82,7 @@ def index():
 def login():
     form = LoginForm() #we will pass this over to our html to be rendered later
     if form.validate_on_submit(): #this checks if it is POST request. but since it is handled by a function, do I still need the methods list up above??
-        user= User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user: #if none, that means that the user tried to login with a username that doesn't exist
             login_user(user)
             return redirect('profile-page') #apparantly the profile-page should be the real redirector? Let me know if this is wrong
