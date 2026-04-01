@@ -9,17 +9,17 @@ from flask_cors import CORS
 from datetime import datetime
 import uuid
 import json
-app = Flask(__name__)
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'thisisasecretkey'
-app.config["JSON_SORT_KEYS"] = False
-app.json.sort_keys = False
-app.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+application = Flask(__name__)
+CORS(application)
+application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+application.config['SECRET_KEY'] = 'thisisasecretkey'
+application.config["JSON_SORT_KEYS"] = False
+application.json.sort_keys = False
+application.jinja_env.policies["json.dumps_kwargs"] = {"sort_keys": False}
+db = SQLAlchemy(application)
+bcrypt = Bcrypt(application)
 login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager.init_app(application)
 login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
@@ -74,11 +74,11 @@ class RegisterForm(FlaskForm):
         existing_user_email = User.query.filter_by(email=email.data).first()
         if existing_user_email:
             raise ValidationError("An account with this email already exists!")
-@app.route('/')
+@application.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['POST', 'GET'])
+@application.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm() #we will pass this over to our html to be rendered later
     if form.validate_on_submit(): #this checks if it is POST request. but since it is handled by a function, do I still need the methods list up above??
@@ -90,7 +90,7 @@ def login():
             pass
     return render_template('login.html', form=form)
 
-@app.route('/register', methods=['POST', 'GET'])
+@application.route('/register', methods=['POST', 'GET'])
 def register():
         #that means cross check the information passed by the form with the database.
     #start by declaring the form 
@@ -109,7 +109,7 @@ def register():
         return redirect(url_for('sec_form')) #replace this with the dashboard or the link to the linked lists main page, for now I am just kicking user to log in
     return render_template('signup.html', form=form)
 
-@app.route('/sec_form', methods = ['GET', 'POST'])
+@application.route('/sec_form', methods = ['GET', 'POST'])
 @login_required
 def sec_form():
     if request.method == 'GET':
@@ -142,7 +142,7 @@ def sec_form():
         db.session.commit()
         return redirect(url_for('profilePage'))
 
-@app.route('/recovery', methods=['GET', 'POST'])
+@application.route('/recovery', methods=['GET', 'POST'])
 def recovery():
     if request.method == 'GET':
         recovery_user_id = session.get('recovery_user_id')
@@ -204,7 +204,7 @@ def recovery():
             flash("incorrect answer(s)")
             return redirect(url_for('recovery'))
 
-@app.route('/newpassword', methods = ['GET', 'POST'])
+@application.route('/newpassword', methods = ['GET', 'POST'])
 def newpass():
     recovery_user_id = session.get('recovery_user_id')
     recovery_verified = session.get('recovery_verified')
@@ -242,7 +242,7 @@ def newpass():
 #views = 0 # Count page views
 #viewers = set() # Track unique viewers to prevent view count from updating on page refreshes by the same user. Improve this later using session tracking or cookies.
 
-@app.route('/dashboard', methods=['GET'])
+@application.route('/dashboard', methods=['GET'])
 def dashboard ():
     #global likes
     #global views
@@ -268,7 +268,7 @@ def dashboard ():
     #return render_template('dashboard.html', comments=comments_list, user=current_user, likes=likes, liked=liked_status, views=views, current_list=current_list)
     return render_template('dashboard.html', user = current_user, current_list=current_list)
 
-@app.route('/post-comment', methods=['POST'])
+@application.route('/post-comment', methods=['POST'])
 @login_required
 def post_comment():
     content = request.form.get('comment-input')
@@ -296,7 +296,7 @@ def post_comment():
     db.session.commit()
     return redirect(url_for('dashboard', index = index))
 
-@app.route('/profile-page')
+@application.route('/profile-page')
 @login_required # Ensures only logged-in users can access this
 def profilePage():
     if current_user.tier_lists: #tierlists is currently just a json string of text, even if it looks like an arrya of dictionaries, python is not interpreting it as such until we run the proper trasnlating methods
@@ -308,7 +308,7 @@ def profilePage():
     # current_user is provided by flask_login and contains the data from the User class
     return render_template('profile-page.html', user=current_user, tier_lists = saved_lists, length=lstLength)
 
-@app.route('/save-list', methods = ['POST'])
+@application.route('/save-list', methods = ['POST'])
 @login_required
 def save_list():
     #this route ties to the new react build, should tie to the database and save the lists here.
@@ -365,7 +365,7 @@ def save_list():
     #we can have a proper return message to send out over here I guess
     return {'message': 'saved gone right!', "current_list" : lst, "index" : saved_index}, 200 #search these codes on your own if you are curious
     #return redirect(url_for('dashboard', index = saved_index))
-@app.route('/get-lists', methods = ['POST', 'GET'])
+@application.route('/get-lists', methods = ['POST', 'GET'])
 @login_required
 def get_lists():
     if current_user.tier_lists:
@@ -373,7 +373,7 @@ def get_lists():
     
     return [] #basically returns nothing, if the user has no tier lists available
 
-@app.route('/delete-list', methods = ["GET", "POST"])
+@application.route('/delete-list', methods = ["GET", "POST"])
 @login_required
 def delete_list(): #this function will be used to delete lists from the database
     lst_id = request.args.get("id", type = str)
@@ -391,7 +391,7 @@ def delete_list(): #this function will be used to delete lists from the database
 
     return redirect(url_for('profilePage'))
 
-@app.route('/search-page', methods = ['GET','POST'])
+@application.route('/search-page', methods = ['GET','POST'])
 @login_required
 def search_page():
     #in this page we are going to pull every user, and all their lists
@@ -469,7 +469,7 @@ def search_page():
 
     return render_template('search.html', all_lists = all_lists)
 
-@app.route('/view-other-list', methods=['GET', 'POST'])
+@application.route('/view-other-list', methods=['GET', 'POST'])
 @login_required
 def view_other_list():
     if request.method == 'POST':
@@ -496,7 +496,7 @@ def view_other_list():
 
     return render_template ('public-dashboard.html', current_list = target_list, list_owner = owner)
 
-@app.route('/save-other-user-list', methods = ['POST']) # this shouldnt even exist
+@application.route('/save-other-user-list', methods = ['POST']) # this shouldnt even exist
 @login_required
 def save_other_user_list():
     return {"error": "forbidden"}, 403
@@ -531,7 +531,7 @@ def save_other_user_list():
 
 #comments the way are set up will need separate handling to work
 
-@app.route('/post-comment-other-list', methods = ['POST'])
+@application.route('/post-comment-other-list', methods = ['POST'])
 @login_required
 def post_comment_other_list():
     owner_id = request.form.get("owner_id", type = int)
@@ -557,11 +557,11 @@ def post_comment_other_list():
 
     return redirect(url_for('view_other_list', owner_id = owner_id, list_id = list_id))
 
-@app.route('/logout', methods = ['POST'])
+@application.route('/logout', methods = ['POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 if __name__ == "__main__":
-    app.run(debug=True)
+    application.run(debug=True)
 
