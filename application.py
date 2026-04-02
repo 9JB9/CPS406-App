@@ -9,6 +9,7 @@ from flask_cors import CORS
 from datetime import datetime
 import uuid
 import json
+
 application = Flask(__name__)
 CORS(application)
 application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
