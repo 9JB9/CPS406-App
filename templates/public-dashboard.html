@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/static/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tier-list</title>
+    <title>Tier Editor - TierDrop</title>
     <script type="module" crossorigin src="/static/assets/index-rvRe6Uq1.js"></script>
     <link rel="stylesheet" crossorigin href="/static/assets/index-CoVxk5mt.css">
     <link rel = "stylesheet" href = /static/css/main.css>
@@ -14,6 +14,14 @@
       window.currentlist = {{current_list|tojson if current_list else 'null'}}
       window.isPublicView = true
     </script>
+    <div id="db-header">
+      <ul id="nav-bar-buttons">
+        <li><img src="/static/assets/td_logo.png" alt="TierDrop"></li>
+        <li id="nav-home"><a href = "{{url_for('index')}}">Home</a></li>
+        <li id="nav-browse"><a href = "{{url_for('search_page')}}">Browse Lists</a></li>
+        <li><a href = "{{url_for('profilePage')}}">Profile</a></li>
+      </ul>
+    </div>
     <div id="root"></div>
     <!-- <div class="action-bar"> -->
       <!-- Placeholder button -->

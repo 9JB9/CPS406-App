@@ -7,8 +7,15 @@
 
 {% block body %}
     <header>
+        <ul id="nav-bar-buttons">
+            <li><img src="/static/assets/td_logo.png" alt="TierDrop"></li>
+            <li id="nav-home"><a href = "{{url_for('login')}}">Log In</a></li>
+            <li id="nav-browse"><a href = "{{url_for('register')}}">Register</a></li>
+            <li id="nav-browse"><a href = "{{url_for('search_page')}}">Browse Lists</a></li>
+        </ul>
+        <!--
         <nav>
-            <div class = "nav-left"> <!--insert some logo, or fancy text here. For now just filler text-->
+            <div class = "nav-left"> insert some logo, or fancy text here. For now just filler text
                 <a href = "">TierDrop</a>
             </div>
             <div class = "nav-right">
@@ -17,6 +24,7 @@
                 <a href = "{{url_for('search_page')}}">Browse Lists</a>
             </div>
         </nav>
+        -->
     </header>
 
     <main>
