@@ -7,8 +7,15 @@
 
 {% block body %}
     <header>
+        <ul id="nav-bar-buttons">
+            <li><img src="/static/assets/td_logo.png" alt="TierDrop"></li>
+            <li id="nav-home"><a href = "{{url_for('login')}}">Log In</a></li>
+            <li id="nav-browse"><a href = "{{url_for('register')}}">Register</a></li>
+            <li id="nav-browse"><a href = "{{url_for('search_page')}}">Browse Lists</a></li>
+        </ul>
+        <!--
         <nav>
-            <div class = "nav-left"> <!--insert some logo, or fancy text here. For now just filler text-->
+            <div class = "nav-left"> insert some logo, or fancy text here. For now just filler text
                 <a href = "">TierDrop</a>
             </div>
             <div class = "nav-right">
@@ -17,6 +24,7 @@
                 <a href = "{{url_for('search_page')}}">Browse Lists</a>
             </div>
         </nav>
+        -->
     </header>
 
     <main>
@@ -24,8 +32,8 @@
         <section class = "hero">
             <!--background image will be done as a pseudo element in CSS main.css-->
             <div class = "hero-text"> <!--should take up about 80% of the screen-->
-                <h1> TierDrop </h1> <!--Not proper header usage, but roll with it-->
-                <p></p>            <!--Come up with some nice slogan or something-->
+                <img src="/static/assets/td_logo_4x.png" alt="TierDrop"> <!--Not proper header usage, but roll with it-->
+                <h2><br><br>Rank your mains. Settle debates.</h2>            <!--Come up with some nice slogan or something-->
             </div>
             <div class = "hero-buttons">
                 <a href="{{url_for('profilePage')}}"> View Tier Lists</a> <!-- Should take user to general list page-->

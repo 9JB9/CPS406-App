@@ -8,21 +8,29 @@
 
 {% block body %}
 <header class = "search-header">
+        <ul id="nav-bar-buttons">
+            <li><img src="/static/assets/td_logo.png" alt="TierDrop"></li>
+        <li id="nav-home"><a href = "{{url_for('index')}}">Home</a></li>
+            <li id="nav-browse"><a href = "{{url_for('search_page')}}">Browse Lists</a></li>
+        <li><a href = "{{url_for('profilePage')}}">Profile</a></li>
+        </ul>
     <nav id = "search-nav">
+        <!--
         <div class="nav-left-header">
             <a href = "{{url_for('index')}}">TierDrop</a>
-        </div>
+        </div>-->
         <div class="nav-search">
             <form method = "POST">
                 <input type = "text" name = "search" placeholder = "Search lists..">
                 <button type = "submit"> Search </button>
             </form>
         </div>
+        <!--
         <div class="nav-right-header">
             <a href = "{{url_for('profilePage')}}">
                 <img src = "{{url_for('static', filename = 'user_img.png')}}" alt = "profile-thumbnail">
             </a>
-        </div>
+        </div>-->
     </nav>
 </header>
 <main id = "search-main">
@@ -50,7 +58,7 @@
                 </div>
             {% endfor %}
         {% else %}
-                <p>No lists found/available</p>
+                <p class = "txt">No lists found/available</p>
         {% endif %}
     </section>
 </main>

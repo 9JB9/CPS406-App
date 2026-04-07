@@ -33,21 +33,23 @@ body{
 }
 
 /*nav content start*/
+/*
 header{
     display: flex;
     justify-content: center;
     width: 100vw;
     padding-block-start: 1rem;
 }
-
+*/
+/*
 nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 10vh;
     background: rgba(255, 255, 255, 0.55);
-    /*backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px); */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); 
     border-radius: 4rem;
     width: 98%;
     padding-inline: 2rem;
@@ -63,6 +65,7 @@ nav{
     color: transparent;
     background-clip: text;
 }
+*/
 
 #violet-color{
     color: #7c3aed;
@@ -72,6 +75,7 @@ nav{
     color: #2dd4bf;
 }
 
+/*
 .nav-right{
     display: flex;
     flex-direction: row;
@@ -79,8 +83,7 @@ nav{
     justify-content: space-around;
     width: 25%;
 }
-
-.nav-right a{ /*fix the styling for these, it looks really weird (this goes for this whole navbar LOL)*/
+.nav-right a{ 
     font-size: 1.125rem;
     border: 2px solid #1e293b;
     padding: 0.75rem 1rem;
@@ -94,6 +97,31 @@ nav{
     background-color: #1e293b;
     color: rgba(255, 255, 255, 0.55);
 ;
+}
+*/
+
+ul {
+  display: flex;
+  list-style-type: none;
+  align-content: center;
+  margin: 0;
+  padding: 0;
+  background-color: #7c3aed;
+}
+
+ul li a {
+  display: block;
+  font-weight: bold;
+  color: #f8fafc;
+  text-align: center;
+  padding: 16px 16px; 
+  text-decoration: none;
+  font-size: 20px;
+}
+
+ul li a:hover {
+  color: black;
+  background-color: #2dd4bf;
 }
 
 /*nav content end*/
@@ -125,16 +153,21 @@ nav{
     }
     .hero-text{
         color: #f8fafc;
-        height: 50%;
+        padding-top: 9vw;
         display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         align-items: flex-end;
     }
     .hero-text h1{
         font-size: 5rem;
         font-weight: 800;
     }
+    .hero-text h2{
+        align-items: center;
+    }
     .hero-buttons{
-        height: 50%;
+        height: 30%;
         width: 100%;
         display: flex;
         flex-direction: row; /* not needed, but i will write it here explicitly anyway */
@@ -782,8 +815,9 @@ body {
 }
 
 .nav-search{
+    margin: 0.5vw;
     width: 60%;
-    height: 100%;
+    height: 4vw;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -801,13 +835,21 @@ body {
 .nav-search form input{
     width: 75%;
     height: 50%;
+    font-size: 16px;
     border-radius: 4rem;
     border: 1px solid #0f172a;
-    padding-inline: 10px 0;
+    padding-inline: 20px 0;
 }
 
 .nav-search form button{
     width: 20%;
+    height: 2vw;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.txt {
+  color: white;
 }
 
 .list-card{
@@ -881,3 +923,110 @@ body {
     margin-top: 2rem;
 }
 /*list browsing page content end*/
+
+
+/* recovery content start */
+
+.recovery-form{
+    background-color: #f8fafc;
+    border-radius: 4em;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.recovery-form-div{
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.recovery-form-div input{
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.recovery-form button {
+    padding: 10px 106px;
+    border-radius: 4em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    transition: all 0.15s ease-in-out 0.15s;
+    cursor: pointer;
+}
+
+.recovery-form button:hover{
+    transform: translateY(-3.5px);
+    filter: brightness(1.1);
+}
+/* recovery content end */
+
+/* sec question content start */
+
+.sec-form{
+    background-color: #f8fafc;
+    border-radius: 4em;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.sec-form button{
+    padding: 10px 106px;
+    border-radius: 4em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    transition: all 0.15s ease-in-out 0.15s;
+    cursor: pointer;
+}
+
+.sec-form button:hover {
+    transform: translateY(-3.5px);
+    filter: brightness(1.1);
+}
+
+/* sec question content end */
+
+/* newpass content start */
+.newpass-form{
+    background-color: #f8fafc;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3rem;
+    border-radius: 4em;
+}
+
+.newpass-form-div{
+    width: 85%;
+}
+
+.newpass-form-div input{
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.newpass-form button{
+    padding: 10px 106px;
+    border-radius: 4em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    transition: all 0.15s ease-in-out 0.15s;
+    cursor: pointer;
+}
+
+.newpass-form button:hover{
+    transform: translateY(-3.5px);
+    filter: brightness(1.1);
+}
+/* newpass content end */
