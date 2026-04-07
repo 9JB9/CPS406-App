@@ -1,0 +1,33 @@
+CPS406-App\static\assets\index-CoVxk5mt.css 
+    Made more legible thru an online code beautifier
+    Changed relevant texts to White for readability
+    Noted down which class name affects what element
+    Added padding to left of screen; 2vw on both sides
+    Added css for comments to shift right and change color
+    Fixed element backgrounds not appearing
+    Implemented Header styling
+
+CPS406-App\static\assets\index-rvRe6Uq1.js
+    Made more legible thru an online code beautifier, original retained in case of errors
+
+CPS406-App\templates\dashboard.html
+    Changed Comments section text to white for readability
+    Implemented header buttons for cross-page nav
+    Logo made
+    Changed tab name
+    Added User Profile Button
+
+CPS406-App\static\css\main.css
+    Applied dashboard css header to relevant pages (hopefully all of them xddd)
+    Changed darker texts to white for readability
+    Added a margin to searchbar
+    Increased searchbar size
+    Adjusted search button size, font, font-weight
+    Adjusted search bar text, size, and padding offset
+
+CPS406-App\templates\public-dashboard.html
+    Applied changes from dashboard.html to this.
+
+Issues Noted
+    Empty text elements are allowed for some reason
+    I believe the "Delete Elements" field should be placed below the "Create Elements" field
