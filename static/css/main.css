@@ -153,16 +153,21 @@ ul li a:hover {
     }
     .hero-text{
         color: #f8fafc;
-        height: 50%;
+        padding-top: 9vw;
         display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         align-items: flex-end;
     }
     .hero-text h1{
         font-size: 5rem;
         font-weight: 800;
     }
+    .hero-text h2{
+        align-items: center;
+    }
     .hero-buttons{
-        height: 50%;
+        height: 30%;
         width: 100%;
         display: flex;
         flex-direction: row; /* not needed, but i will write it here explicitly anyway */

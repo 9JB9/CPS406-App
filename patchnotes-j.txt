@@ -17,6 +17,11 @@ CPS406-App\templates\dashboard.html
     Changed tab name
     Added User Profile Button
 
+CPS406-App\templates\index.html
+    Applied header as with other pages
+    Applied new logo 
+    Wrote in the cheesiest slogan i could think of (sorry)
+
 CPS406-App\static\css\main.css
     Applied dashboard css header to relevant pages (hopefully all of them xddd)
     Changed darker texts to white for readability
@@ -24,6 +29,7 @@ CPS406-App\static\css\main.css
     Increased searchbar size
     Adjusted search button size, font, font-weight
     Adjusted search bar text, size, and padding offset
+    Messed with the spacing. I don't know how it will look on other monitors.
 
 CPS406-App\templates\public-dashboard.html
     Applied changes from dashboard.html to this.
