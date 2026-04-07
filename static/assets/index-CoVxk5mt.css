@@ -1,1 +1,111 @@
-.horizontal-list{display:flex;list-style-type:none;margin:0;padding:0;width:50vw;min-width:5vw;min-height:5vw;background-size:contain;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAALuAgMAAACMc3tZAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQ4ODhISEhQUFBYWFv41QDgAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJVSURBVHja7c4xEYAwFECxL7FL/TFXHQ5gwgDbu0sUZAYAAAAAAAAAPrtrycvLd8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHrDld1zxdt7y8fIe8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLz8r/zpumZ3LXl5+Q55efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5kDUAAAAAAAAA8HkB38gccV+IEEYAAAAASUVORK5CYII=);overflow-x:auto}.ranked-element{width:5vw;height:5vw;background-size:cover;background-image:url(/static/assets/assets/textElementBackground-CvElkckt.png);color:#fff;word-break:break-word;overflow:hidden}.tier{width:5vw;height:5vw;font-size:2.5vw;font-weight:700}.trash-can{display:flex;list-style-type:none;margin:0;padding:0;min-width:5vw;min-height:5vw;background-size:contain;background-image:url(/static/assets/assets/deleteElementBackground-BTMDRu-l.png);overflow-x:auto}.xy-centered{display:flex;text-align:center;align-items:center;justify-content:center}.larger-list{width:55vw}.flex{display:flex}.max-width{width:100%}.left-aligned{float:left;padding-right:50px}.inline-block{display:inline-block}
+/* Affects interactable tier list UI */
+.horizontal-list {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 50vw;
+  min-width: 5vw;
+  min-height: 5vw;
+  background-size: contain;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAALuAgMAAACMc3tZAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQ4ODhISEhQUFBYWFv41QDgAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJVSURBVHja7c4xEYAwFECxL7FL/TFXHQ5gwgDbu0sUZAYAAAAAAAAAPrtrycvLd8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHyMvLh8jLy4fIy8uHrDld1zxdt7y8fIe8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLy8fIi8vHyIvLx8iLz8r/zpumZ3LXl5+Q55efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5EHl5+RB5efkQeXn5kDUAAAAAAAAA8HkB38gccV+IEEYAAAAASUVORK5CYII=);
+  overflow-x: auto;
+}
+/* Affects tier list elements */
+.ranked-element {
+  width: 5vw;
+  height: 5vw;
+  background-size: cover;
+  background-image: url(textElementBackground-CvElkckt.png);
+  color: #fff;
+  word-break: break-word;
+  overflow: hidden;
+}
+/* Affects tier list Tier boxes (i.e., S, A, B, etc.) */
+.tier {
+  width: 5vw;
+  height: 5vw;
+  border-top-left-radius: 1vw;
+  border-bottom-left-radius: 1vw;
+  font-size: 2.5vw;
+  font-weight: 700;
+  color: #1e293b;
+}
+/* Affects drag-to-delete section */
+.trash-can {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  min-width: 5vw;
+  min-height: 5vw;
+  background-size: contain;
+  background-image: url(deleteElementBackground-BTMDRu-l.png);
+  overflow-x: auto;
+}
+/* Affects text on Tier labels */
+.xy-centered {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+/* Affects unranked element list */
+.larger-list {
+  width: 55vw;
+  border-top-left-radius: 1vw;
+  border-bottom-left-radius: 1vw;
+}
+/* idk lol */
+.flex {
+  display: flex;
+}
+.max-width {
+  width: 100%;
+}
+/* Affects text on Tier labels and garbage zone */
+.left-aligned {
+  float: left;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  color: #f8fafc;
+}
+/* Affects text elements to right of list */
+.inline-block {
+  line-height:2vw;
+  display: inline-block;
+  color: #f8fafc;
+}
+
+.comments {
+  margin: 1.25vw;
+  color: #f8fafc;
+}
+
+.title {
+  align-content: center;
+}
+
+ul {
+  display: flex;
+  list-style-type: none;
+  align-content: center;
+  margin: 0;
+  padding: 0;
+  background-color: #7c3aed;
+}
+
+ul li a {
+  display: block;
+  font-weight: bold;
+  color: #f8fafc;
+  text-align: center;
+  padding: 16px 16px; 
+  text-decoration: none;
+  font-size: 20px;
+}
+
+ul li a:hover {
+  color: black;
+  background-color: #2dd4bf;
+}
