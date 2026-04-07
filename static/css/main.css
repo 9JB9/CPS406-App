@@ -923,3 +923,110 @@ body {
     margin-top: 2rem;
 }
 /*list browsing page content end*/
+
+
+/* recovery content start */
+
+.recovery-form{
+    background-color: #f8fafc;
+    border-radius: 4em;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.recovery-form-div{
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.recovery-form-div input{
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.recovery-form button {
+    padding: 10px 106px;
+    border-radius: 4em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    transition: all 0.15s ease-in-out 0.15s;
+    cursor: pointer;
+}
+
+.recovery-form button:hover{
+    transform: translateY(-3.5px);
+    filter: brightness(1.1);
+}
+/* recovery content end */
+
+/* sec question content start */
+
+.sec-form{
+    background-color: #f8fafc;
+    border-radius: 4em;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.sec-form button{
+    padding: 10px 106px;
+    border-radius: 4em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    transition: all 0.15s ease-in-out 0.15s;
+    cursor: pointer;
+}
+
+.sec-form button:hover {
+    transform: translateY(-3.5px);
+    filter: brightness(1.1);
+}
+
+/* sec question content end */
+
+/* newpass content start */
+.newpass-form{
+    background-color: #f8fafc;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3rem;
+    border-radius: 4em;
+}
+
+.newpass-form-div{
+    width: 85%;
+}
+
+.newpass-form-div input{
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.newpass-form button{
+    padding: 10px 106px;
+    border-radius: 4em;
+    background: linear-gradient(135deg, #7c3aed, #2dd4bf);
+    transition: all 0.15s ease-in-out 0.15s;
+    cursor: pointer;
+}
+
+.newpass-form button:hover{
+    transform: translateY(-3.5px);
+    filter: brightness(1.1);
+}
+/* newpass content end */
