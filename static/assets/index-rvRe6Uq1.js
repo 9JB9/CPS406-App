@@ -16047,7 +16047,7 @@ function DD({
 
 	function F(nt) {
 		const st = nt.target.files,
-			gt = structuredClone(r);
+			gt = structuredClone(r); 
 		for (let M = 0; M < st.length; M++) {
 			let q = URL.createObjectURL(st[M]);
 			W(gt, A, q)

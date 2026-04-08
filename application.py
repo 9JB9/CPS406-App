@@ -34,13 +34,13 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(254), nullable=False, unique=True) #email must be unique
     username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     tier_lists = db.Column(db.Text, nullable=True)
     sec_questions = db.Column(db.Text, nullable = True)
     #probably don't need to worry too much about bcrypt hash size, since this will just truncate, which is still plenty safe.
 class LoginForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
-    password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
+    password = StringField(validators=[InputRequired(), Length(min=8, max=72)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Login") # this will be used to represent the button in the html form
 
     def validate_email(self, email):
@@ -55,7 +55,7 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     email = StringField(validators=[InputRequired(), Email(), Length(min=6, max=254)], render_kw={"Placeholder": "Email"})
     username = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Username"})
-    password = StringField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"Placeholder": "Password", "type" : "password"})
+    password = StringField(validators=[InputRequired(), Length(min=8, max = 72)], render_kw={"Placeholder": "Password", "type" : "password"})
     submit = SubmitField("Sign up")
 
     #we need to check that this user isnt a duplicate

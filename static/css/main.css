@@ -1030,3 +1030,26 @@ body {
     filter: brightness(1.1);
 }
 /* newpass content end */
+
+/* dashboard note */
+.dashboard-upload-note{
+    display: flex;
+    color: #f8fafc;
+    width: 35vw;
+    height: 35vh;
+    margin-left: 50%;
+    border: 1px solid #7c3aed;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 1em;
+    border-radius: 1em;
+    padding: 10px 10px;
+}
+
+.dashboard-upload-note img{
+    max-height: auto;
+    width: 100%;
+    object-fit: contain;
+    display: block;
+}
+
