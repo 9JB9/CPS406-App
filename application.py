@@ -318,15 +318,6 @@ def save_list():
     if not lst:
         return {'error' : 'no data was received'}, 400 #i love doing errors like this now
 
-    #now we are going to put some checks to both update old list objects, and for safe guarding
-    if "id" not in lst:
-        lst["id"] = str(uuid.uuid4()) #these are just creating new dictionary entries, since lst is a dictionary value holding all the attributes of the lists we create
-    if "comments" not in lst:
-        lst["comments"] = []
-    if "likes" not in lst:
-        lst["likes"] = [] #list to let me track who likes, and not just a counter of how many liked
-    if "views" not in lst:
-        lst["views"] = 0
     if current_user.tier_lists: #checks if the column for that user's tier lists is empty in the database
         saved_lists = json.loads(current_user.tier_lists) #if not empty we load them into this variable
     else:
@@ -351,12 +342,30 @@ def save_list():
                 break
     
     if exact_match_index != None:
+        old_list = saved_lists[exact_match_index]
+        lst["id"] = old_list.get("id", lst.get("id", str(uuid.uuid4())))
+        lst["comments"] = old_list.get("comments", [])
+        lst["likes"] = old_list.get("likes", [])
+        lst["views"] = old_list.get("views", 0)
         saved_lists[exact_match_index] = lst
         saved_index = exact_match_index
     elif only_title_match != None:
+        old_list = saved_lists[only_title_match]
+        lst["id"] = old_list.get("id", lst.get("id", str(uuid.uuid4())))
+        lst["comments"] = old_list.get("comments", [])
+        lst["likes"] = old_list.get("likes", [])
+        lst["views"] = old_list.get("views", 0)
         saved_lists[only_title_match] = lst
         saved_index = only_title_match
     else:
+        if "id" not in lst:
+            lst["id"] = str(uuid.uuid4()) #these are just creating new dictionary entries, since lst is a dictionary value holding all the attributes of the lists we create
+        if "comments" not in lst:
+            lst["comments"] = []
+        if "likes" not in lst:
+            lst["likes"] = [] #list to let me track who likes, and not just a counter of how many liked
+        if "views" not in lst:
+            lst["views"] = 0
         saved_lists.append(lst)
         saved_index = len(saved_lists) - 1
     current_user.tier_lists = json.dumps(saved_lists)
@@ -565,4 +574,3 @@ def logout():
     return redirect(url_for('index'))
 if __name__ == "__main__":
     application.run(debug=True)
-
