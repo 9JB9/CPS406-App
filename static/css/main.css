@@ -1053,3 +1053,17 @@ body {
     display: block;
 }
 
+/*INVISIBLE ELEMENTS THAT NEED PATCHING*/
+
+
+#imageSubmission{
+    color: transparent;
+    display: none;
+}
+#imageSubmission::file-selector-button{
+    display: none;
+}
+
+#file-upload-heading{
+    display: none;
+}

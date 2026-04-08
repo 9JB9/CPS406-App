@@ -16145,8 +16145,9 @@ function DD({
 			}), lt.jsxs("span", {
 				className: "inline-block",
 				children: [lt.jsx("h2", {
-					children: "Create Elements (Does Not Validate Input Yet)"
+					children: "Create Elements"
 				}), lt.jsx("h3", {
+					id: "file-upload-heading",
 					children: "Image Element by File Upload"
 				}), lt.jsx("input", {
 					type: "file",
