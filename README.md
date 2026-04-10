@@ -35,7 +35,7 @@ pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt fl
 - Localhost!
 - How does it work?
     * Localhost can be activated in 2 ways: by running 'flask run' on your terminal or by running 'application.py'
-    * Which to choose? Simple, if you want to debug something, running the program with 'app.py' is better, as it will provide you with flask's debugging tools. Whereas, if you do 'flask run' errors will be harder to catch, and no error messages will be displayed (in my short experience)
+    * Which to choose? Simple, if you want to debug something, running the program with 'application.py' is better, as it will provide you with flask's debugging tools. Whereas, if you do 'flask run' errors will be harder to catch, and no error messages will be displayed (in my short experience)
     * Note, you do have the option to turn off debugging on the app itself, so then it would behave equally between both testing methods
     * I am sure there is another difference I am not aware.
 
