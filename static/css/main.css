@@ -1056,3 +1056,11 @@ body {
 /*INVISIBLE ELEMENTS THAT NEED PATCHING*/
 
 
+#imageSubmission{
+    display: none;
+}
+#fileUploadHeader
+{
+    display: none;
+    color: transparent;
+}
