@@ -1059,6 +1059,16 @@ body {
 #imageSubmission{
     display: none;
 }
+
+.public-dashboard-page .inline-block {
+    display: none;
+}
+
+.public-dashboard-page #imageSubmission,
+.public-dashboard-page #urlSubmission,
+.public-dashboard-page #textSubmission {
+    display: none;
+}
 #fileUploadHeader
 {
     display: none;
